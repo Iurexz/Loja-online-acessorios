@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Manrope', sans-serif;
+  --surface: #f6f4eb;
+  --surface-soft: #fffdfa;
+  --ink: #3f2a37;
+  --muted: #7f6673;
+  --line: #e7d9e1;
+  --brand: #cf86aa;
+  --brand-soft: #f2dae6;
+  --forest: #8f5b74;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background-color: var(--surface);
+  background-image:
+    radial-gradient(90rem 60rem at 100% -15%, #edd2df 0%, transparent 46%),
+    radial-gradient(80rem 55rem at -15% 20%, #f1e2ea 0%, transparent 45%),
+    linear-gradient(170deg, #f6f4eb 0%, #fff9fc 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: #e5b8c8;
+  color: #3f2a37;
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .glass {
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.82),
+      rgba(248, 236, 242, 0.68)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      0 24px 60px rgba(74, 43, 62, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(14px);
+  }
+
+  .animate-rise {
+    animation: rise 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .animate-float {
+    animation: float 4.8s ease-in-out infinite;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
