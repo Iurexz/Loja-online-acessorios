@@ -91,6 +91,41 @@ a {
   .text-balance {
     text-wrap: balance;
   }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ticker-track {
+    animation-duration: 28s;
+  }
+
+  .mobile-dock {
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -10px 30px rgba(58, 38, 50, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .ticker-track {
+    animation: none !important;
+  }
+
+  .hover-lift {
+    transition: none;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
 }
 
 @keyframes rise {

@@ -6,11 +6,16 @@ import {
   CheckCircle2,
   CircleAlert,
   ExternalLink,
+  House,
   Heart,
+  LayoutGrid,
   Menu,
+  Minus,
+  Plus,
   Search,
   ShieldCheck,
   ShoppingBag,
+  Sparkles,
   Star,
   Truck,
   X,
@@ -50,7 +55,50 @@ type CartItem = Product & {
   quantity: number
 }
 
+type CheckoutStep = 1 | 2 | 3
+
+type CheckoutData = {
+  fullName: string
+  phone: string
+  email: string
+  cep: string
+  street: string
+  number: string
+  neighborhood: string
+  city: string
+  state: string
+  note: string
+  paymentMethod: 'Pix' | 'Cartao' | 'Boleto'
+}
+
+type ProductCardProps = {
+  product: Product
+  isFavorite: boolean
+  onToggleFavorite: (product: Product) => void
+  onAddToCart: (product: Product) => void
+}
+
 const ALL_CATEGORIES = 'Todas'
+
+const initialCheckoutData: CheckoutData = {
+  fullName: '',
+  phone: '',
+  email: '',
+  cep: '',
+  street: '',
+  number: '',
+  neighborhood: '',
+  city: '',
+  state: '',
+  note: '',
+  paymentMethod: 'Pix',
+}
+
+const checkoutSteps: Array<{ id: CheckoutStep; label: string }> = [
+  { id: 1, label: 'Dados' },
+  { id: 2, label: 'Entrega' },
+  { id: 3, label: 'Pagamento' },
+]
 
 const parseCurrency = (value: string) =>
   Number(value.replace('R$', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.'))
@@ -66,7 +114,7 @@ const navLinks = [
   { label: 'COLECOES', href: '#colecoes' },
   { label: 'BEST SELLER', href: '#best-seller' },
   { label: 'NOVIDADES', href: '#novidades' },
-  { label: 'CONTATO', href: '#rodape' },
+  { label: 'CHECKOUT', href: '#checkout' },
 ]
 
 const categories: Category[] = [
@@ -246,12 +294,87 @@ const productWhatsAppLink = (product: Product) => {
   return `https://wa.me/5571900000000?text=${message}`
 }
 
+function ProductCard({
+  product,
+  isFavorite,
+  onToggleFavorite,
+  onAddToCart,
+}: ProductCardProps) {
+  return (
+    <article className="glass hover-lift animate-rise rounded-3xl p-5">
+      <div
+        className={`relative mb-5 aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br ${product.tone} p-4`}
+      >
+        <p className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">
+          {product.badge}
+        </p>
+        <p className="absolute right-3 top-3 rounded-full bg-[var(--ink)] px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-white">
+          {product.category}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => onToggleFavorite(product)}
+          className={`absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full transition ${
+            isFavorite
+              ? 'bg-[var(--brand-deep)] text-white'
+              : 'bg-white/85 text-[var(--brand-deep)]'
+          }`}
+          aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+        >
+          <Heart size={16} />
+        </button>
+      </div>
+
+      <h3 className="text-lg font-semibold text-[var(--ink)]">{product.name}</h3>
+
+      <div className="mt-3 flex items-end gap-2">
+        {product.oldPrice ? (
+          <span className="text-sm text-[var(--muted)] line-through">{product.oldPrice}</span>
+        ) : null}
+        <span className="font-heading text-3xl leading-none text-[var(--ink)]">{product.price}</span>
+      </div>
+
+      <div className="mt-2 flex items-center gap-1 text-[var(--brand)]">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <Star key={`${product.id}-star-${index}`} size={12} fill="currentColor" />
+        ))}
+      </div>
+
+      <p className="mt-1 text-sm text-[var(--muted)]">{product.installment}</p>
+      <p className="mt-1 text-sm font-semibold text-[var(--brand-deep)]">{product.pix}</p>
+
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => onAddToCart(product)}
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
+        >
+          ADICIONAR <ShoppingBag size={13} />
+        </button>
+        <a
+          href={productWhatsAppLink(product)}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--brand-soft)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)] transition hover:brightness-95"
+        >
+          COMPRAR <ExternalLink size={13} />
+        </a>
+      </div>
+    </article>
+  )
+}
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES)
   const [searchTerm, setSearchTerm] = useState('')
   const [favoriteIds, setFavoriteIds] = useState<string[]>([])
   const [cart, setCart] = useState<Record<string, number>>({})
+  const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>(1)
+  const [checkoutData, setCheckoutData] = useState<CheckoutData>(initialCheckoutData)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterFeedback, setNewsletterFeedback] = useState<string | null>(null)
   const [notification, setNotification] = useState<Notification | null>(null)
@@ -280,6 +403,16 @@ function App() {
     const selected = filteredProducts.filter((product) => product.badge === 'Novidade')
     return selected.length ? selected : filteredProducts.slice(0, 6)
   }, [filteredProducts])
+
+  const goldProducts = useMemo(() => {
+    const selected = filteredProducts.filter((product) => product.category === 'Semijoias de Ouro')
+    return selected.length ? selected : bestSellerProducts.slice(0, 6)
+  }, [bestSellerProducts, filteredProducts])
+
+  const silverProducts = useMemo(() => {
+    const selected = filteredProducts.filter((product) => product.category === 'Semijoias de Prata')
+    return selected.length ? selected : bestSellerProducts.slice(0, 6)
+  }, [bestSellerProducts, filteredProducts])
 
   const favoriteProducts = useMemo(
     () => products.filter((product) => favoriteIds.includes(product.id)),
@@ -311,7 +444,7 @@ function App() {
     [cartItems],
   )
 
-  const whatsappCheckoutLink = useMemo(() => {
+  const checkoutWhatsAppLink = useMemo(() => {
     if (!cartItems.length) {
       return 'https://wa.me/5571900000000'
     }
@@ -323,14 +456,33 @@ function App() {
         )})`,
     )
 
-    const message = encodeURIComponent(
-      `Oi! Quero finalizar meu pedido:%0A${lines.join(
-        '%0A',
-      )}%0ATotal: ${toCurrency(cartTotal)}`,
-    )
+    const message = [
+      'Oi! Quero finalizar meu pedido:',
+      '',
+      'Cliente:',
+      `Nome: ${checkoutData.fullName || 'Nao informado'}`,
+      `Telefone: ${checkoutData.phone || 'Nao informado'}`,
+      `Email: ${checkoutData.email || 'Nao informado'}`,
+      '',
+      'Entrega:',
+      `CEP: ${checkoutData.cep || 'Nao informado'}`,
+      `Endereco: ${checkoutData.street || 'Nao informado'}, ${checkoutData.number || 's/n'}`,
+      `Bairro: ${checkoutData.neighborhood || 'Nao informado'}`,
+      `Cidade/UF: ${checkoutData.city || 'Nao informado'} - ${checkoutData.state || '--'}`,
+      '',
+      `Pagamento: ${checkoutData.paymentMethod}`,
+      checkoutData.note ? `Observacoes: ${checkoutData.note}` : '',
+      '',
+      'Itens:',
+      ...lines,
+      '',
+      `Total: ${toCurrency(cartTotal)}`,
+    ]
+      .filter(Boolean)
+      .join('\n')
 
-    return `https://wa.me/5571900000000?text=${message}`
-  }, [cartItems, cartTotal])
+    return `https://wa.me/5571900000000?text=${encodeURIComponent(message)}`
+  }, [cartItems, cartTotal, checkoutData])
 
   useEffect(() => {
     if (!notification) {
@@ -345,6 +497,27 @@ function App() {
       window.clearTimeout(timeoutId)
     }
   }, [notification])
+
+  useEffect(() => {
+    if (!isCartOpen) {
+      return
+    }
+
+    const previousOverflow = document.body.style.overflow
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsCartOpen(false)
+      }
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isCartOpen])
 
   const notify = (message: string, type: Notification['type'] = 'info') => {
     setNotification({ message, type })
@@ -411,13 +584,41 @@ function App() {
     )
   }
 
+  const handleOpenCart = () => {
+    setIsCartOpen(true)
+    setCheckoutError(null)
+  }
+
+  const handleCloseCart = () => {
+    setIsCartOpen(false)
+    setCheckoutError(null)
+  }
+
   const handleAddToCart = (product: Product) => {
     setCart((current) => ({
       ...current,
       [product.id]: (current[product.id] ?? 0) + 1,
     }))
 
-    notify(`${product.name} adicionado a sacola.`, 'success')
+    notify(`${product.name} adicionado ao carrinho.`, 'success')
+  }
+
+  const handleUpdateCartQuantity = (productId: string, change: number) => {
+    setCart((current) => {
+      const currentQuantity = current[productId] ?? 0
+      const nextQuantity = currentQuantity + change
+
+      if (nextQuantity <= 0) {
+        const next = { ...current }
+        delete next[productId]
+        return next
+      }
+
+      return {
+        ...current,
+        [productId]: nextQuantity,
+      }
+    })
   }
 
   const handleRemoveFromCart = (productId: string) => {
@@ -427,12 +628,113 @@ function App() {
       return next
     })
 
-    notify('Item removido da sacola.')
+    notify('Item removido do carrinho.')
   }
 
   const handleClearCart = () => {
     setCart({})
-    notify('Sacola esvaziada.')
+    setCheckoutStep(1)
+    setCheckoutData(initialCheckoutData)
+    setCheckoutError(null)
+    setIsCartOpen(false)
+    notify('Carrinho esvaziado.')
+  }
+
+  const handleCheckoutFieldChange = (field: keyof CheckoutData, value: string) => {
+    setCheckoutData((current) => ({
+      ...current,
+      [field]: value,
+    }))
+    setCheckoutError(null)
+  }
+
+  const validateCheckoutStep = (step: CheckoutStep) => {
+    if (step === 1) {
+      if (!checkoutData.fullName.trim() || !checkoutData.phone.trim() || !checkoutData.email.trim()) {
+        setCheckoutError('Preencha nome, telefone e e-mail para continuar.')
+        return false
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(checkoutData.email.trim())) {
+        setCheckoutError('Digite um e-mail valido.')
+        return false
+      }
+    }
+
+    if (step === 2) {
+      if (
+        !checkoutData.cep.trim() ||
+        !checkoutData.street.trim() ||
+        !checkoutData.number.trim() ||
+        !checkoutData.city.trim() ||
+        !checkoutData.state.trim()
+      ) {
+        setCheckoutError('Preencha os dados de entrega obrigatorios.')
+        return false
+      }
+    }
+
+    if (step === 3 && !checkoutData.paymentMethod) {
+      setCheckoutError('Selecione uma forma de pagamento.')
+      return false
+    }
+
+    setCheckoutError(null)
+    return true
+  }
+
+  const handleNextCheckoutStep = () => {
+    if (!validateCheckoutStep(checkoutStep)) {
+      return
+    }
+
+    setCheckoutStep((current) => {
+      if (current === 1) {
+        return 2
+      }
+
+      if (current === 2) {
+        return 3
+      }
+
+      return 3
+    })
+  }
+
+  const handlePreviousCheckoutStep = () => {
+    setCheckoutError(null)
+    setCheckoutStep((current) => {
+      if (current === 3) {
+        return 2
+      }
+
+      if (current === 2) {
+        return 1
+      }
+
+      return 1
+    })
+  }
+
+  const handleStartCheckout = () => {
+    if (!cartItems.length) {
+      notify('Adicione ao menos 1 item para iniciar o checkout.')
+      return
+    }
+
+    setCheckoutStep(1)
+    setCheckoutError(null)
+    setIsCartOpen(true)
+  }
+
+  const handleCheckoutFinalizeClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!validateCheckoutStep(3)) {
+      event.preventDefault()
+      return
+    }
+
+    notify('Redirecionando para o WhatsApp com seu pedido.', 'success')
   }
 
   const handleNewsletterSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -452,6 +754,30 @@ function App() {
     notify('Cadastro realizado com sucesso!', 'success')
   }
 
+  const renderProductShelf = (items: Product[], emptyMessage: string) => {
+    if (!items.length) {
+      return (
+        <div className="mt-5 rounded-3xl border border-[var(--line)] bg-white p-7 text-center text-sm text-[var(--muted)]">
+          {emptyMessage}
+        </div>
+      )
+    }
+
+    return (
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            isFavorite={favoriteIds.includes(product.id)}
+            onToggleFavorite={handleToggleFavorite}
+            onAddToCart={handleAddToCart}
+          />
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div id="top" className="min-h-screen">
       <div className="bg-[var(--brand-deep)] text-white">
@@ -463,19 +789,28 @@ function App() {
                 Entrega para todo Brasil · 3% OFF no Pix · Em ate 12x no cartao · Garantia em todas as pecas
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => scrollToSection('#sacola')}
-              className="rounded-full bg-white/15 px-3 py-1 transition hover:bg-white/20"
-            >
-              Ir para sacola
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollToSection('#checkout')}
+                className="rounded-full bg-white/10 px-3 py-1 transition hover:bg-white/20"
+              >
+                Rastrear pedido
+              </button>
+              <button
+                type="button"
+                onClick={handleOpenCart}
+                className="rounded-full bg-white/15 px-3 py-1 transition hover:bg-white/20"
+              >
+                Abrir carrinho
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="border-b border-[var(--line)] bg-[var(--surface-soft)]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.11em] text-[var(--muted)] lg:px-8 sm:text-xs">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.11em] text-[var(--muted)] sm:text-xs lg:px-8">
           <span className="inline-flex items-center gap-2">
             <Truck size={14} /> entrega em todo o Brasil
           </span>
@@ -562,8 +897,8 @@ function App() {
 
             <button
               type="button"
-              aria-label="Sacola"
-              onClick={() => scrollToSection('#sacola')}
+              aria-label="Carrinho"
+              onClick={handleOpenCart}
               className="relative grid h-10 w-10 place-items-center rounded-full bg-[var(--ink)] text-white"
             >
               <ShoppingBag size={17} />
@@ -604,22 +939,61 @@ function App() {
                 </a>
               ))}
             </nav>
+
+            <button
+              type="button"
+              onClick={handleOpenCart}
+              className="mt-3 w-full rounded-full bg-[var(--ink)] px-4 py-2 text-xs font-bold uppercase tracking-[0.09em] text-white"
+            >
+              Abrir carrinho
+            </button>
           </div>
         ) : null}
       </header>
 
-      <main className="pb-16">
+      <main className="pb-24 lg:pb-16">
+        <section className="px-4 pb-1 pt-4 lg:px-8">
+          <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto pb-2">
+            <div className="flex min-w-max items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
+                className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)]"
+              >
+                Todas categorias
+              </button>
+              {categories.map((category) => (
+                <button
+                  key={`quick-${category.name}`}
+                  type="button"
+                  onClick={() => handleCategoryRedirect(category.name)}
+                  className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)]"
+                >
+                  {category.name}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={handleOpenCart}
+                className="rounded-full bg-[var(--ink)] px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.09em] text-white"
+              >
+                Ir para checkout
+              </button>
+            </div>
+          </div>
+        </section>
+
         <section className="px-4 py-8 lg:px-8 lg:py-12">
           <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[1.45fr_0.95fr]">
             <article className="animate-rise rounded-3xl bg-gradient-to-br from-[#744158] via-[#90516d] to-[#5f3548] p-7 text-white sm:p-9">
               <p className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.12em]">
-                Colecao dia das maes
+                Vitrine principal
               </p>
               <h1 className="mt-4 max-w-xl text-balance font-heading text-4xl leading-tight sm:text-5xl">
-                é desse jeito que você quer ou mais simples ainda?
+                Semijoias praticas, bonitas e prontas para vender
               </h1>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-[#f5e8ee] sm:text-base">
-                Explore nossos destaques, encontre rapido por categoria e finalize no WhatsApp em poucos cliques.
+                Fluxo direto: escolher, adicionar e fechar no checkout lateral em poucos toques.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
@@ -631,10 +1005,10 @@ function App() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => scrollToSection('#novidades')}
+                  onClick={handleOpenCart}
                   className="inline-flex items-center gap-2 rounded-full border border-white/45 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:bg-white/12"
                 >
-                  Ver novidades
+                  Abrir carrinho
                 </button>
               </div>
             </article>
@@ -642,13 +1016,13 @@ function App() {
             <div className="grid gap-4">
               <article className="animate-rise rounded-3xl border border-[var(--line)] bg-white p-5 sm:p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
-                  Compre e lucre
+                  Venda e lucre
                 </p>
                 <h3 className="mt-2 font-heading text-3xl text-[var(--ink)]">
                   Condicoes para revenda
                 </h3>
                 <p className="mt-2 text-sm text-[var(--muted)]">
-                  Kits com margem alta para quem quer revender com estoque leve.
+                  Kits com margem alta para revender com estoque leve.
                 </p>
                 <a
                   href="https://wa.me/5571900000000"
@@ -662,23 +1036,54 @@ function App() {
 
               <article className="animate-rise rounded-3xl border border-[var(--line)] bg-[var(--brand-soft)] p-5 sm:p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--brand-deep)]">
-                  Garantia e cuidado
+                  Compra segura
                 </p>
                 <h3 className="mt-2 font-heading text-3xl text-[var(--ink)]">
-                  Qualidade em primeiro lugar
+                  Checkout em 3 passos
                 </h3>
                 <p className="mt-2 text-sm text-[var(--muted)]">
-                  Suporte rapido para trocas e orientacoes de conservacao das pecas.
+                  Dados, entrega e pagamento dentro do carrinho lateral.
                 </p>
                 <button
                   type="button"
-                  onClick={() => scrollToSection('#newsletter')}
+                  onClick={handleStartCheckout}
                   className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]"
                 >
-                  Receber novidades <ArrowRight size={13} />
+                  Iniciar checkout <ArrowRight size={13} />
                 </button>
               </article>
             </div>
+          </div>
+        </section>
+
+        <section className="px-4 pb-5 lg:px-8">
+          <div className="mx-auto grid max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <article className="glass rounded-3xl px-5 py-4">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
+                Frete para todo Brasil
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[var(--ink)]">
+                RJ e SP com condicoes especiais e envio rapido.
+              </p>
+            </article>
+
+            <article className="glass rounded-3xl px-5 py-4">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
+                Formas de pagamento
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[var(--ink)]">
+                Em ate 12x no cartao e 3% OFF no Pix no atendimento.
+              </p>
+            </article>
+
+            <article className="glass rounded-3xl px-5 py-4 sm:col-span-2 lg:col-span-1">
+              <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
+                Garantia e suporte
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[var(--ink)]">
+                Atendimento dedicado para trocas, duvidas e pos-venda.
+              </p>
+            </article>
           </div>
         </section>
 
@@ -694,7 +1099,7 @@ function App() {
                 </h2>
               </div>
               <p className="max-w-md text-sm text-[var(--muted)]">
-                Layout simples para cliente achar rapido e comprar sem friccao.
+                Selecao rapida no mesmo estilo da vitrine principal de e-commerce.
               </p>
             </div>
 
@@ -783,72 +1188,55 @@ function App() {
               </div>
             ) : null}
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {bestSellerProducts.map((product) => {
-                const isFavorite = favoriteIds.includes(product.id)
+            {renderProductShelf(bestSellerProducts, 'Nenhum produto encontrado nessa combinacao.')}
+          </div>
+        </section>
 
-                return (
-                  <article key={product.id} className="glass hover-lift animate-rise rounded-3xl p-5">
-                    <div className={`relative mb-5 aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br ${product.tone} p-4`}>
-                      <p className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">
-                        {product.badge}
-                      </p>
-                      <p className="absolute right-3 top-3 rounded-full bg-[var(--ink)] px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-white">
-                        {product.category}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => handleToggleFavorite(product)}
-                        className={`absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full transition ${
-                          isFavorite
-                            ? 'bg-[var(--brand-deep)] text-white'
-                            : 'bg-white/85 text-[var(--brand-deep)]'
-                        }`}
-                        aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                      >
-                        <Heart size={16} />
-                      </button>
-                    </div>
-
-                    <h3 className="text-lg font-semibold text-[var(--ink)]">{product.name}</h3>
-
-                    <div className="mt-3 flex items-end gap-2">
-                      {product.oldPrice ? (
-                        <span className="text-sm text-[var(--muted)] line-through">{product.oldPrice}</span>
-                      ) : null}
-                      <span className="font-heading text-3xl leading-none text-[var(--ink)]">{product.price}</span>
-                    </div>
-
-                    <p className="mt-1 text-sm text-[var(--muted)]">{product.installment}</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--brand-deep)]">{product.pix}</p>
-
-                    <div className="mt-5 grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleAddToCart(product)}
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
-                      >
-                        Adicionar <ShoppingBag size={13} />
-                      </button>
-                      <a
-                        href={productWhatsAppLink(product)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--brand-soft)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)] transition hover:brightness-95"
-                      >
-                        Comprar <ExternalLink size={13} />
-                      </a>
-                    </div>
-                  </article>
-                )
-              })}
+        <section className="px-4 py-10 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
+                  Vitrine
+                </p>
+                <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
+                  Banho de ouro
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleCategoryRedirect('Semijoias de Ouro')}
+                className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.09em] text-[var(--brand-deep)]"
+              >
+                Ver tudo
+              </button>
             </div>
 
-            {!bestSellerProducts.length ? (
-              <div className="mt-5 rounded-3xl border border-[var(--line)] bg-white p-7 text-center text-sm text-[var(--muted)]">
-                Nenhum produto encontrado nessa combinacao. Tente limpar os filtros.
+            {renderProductShelf(goldProducts, 'Sem produtos de ouro para este filtro.')}
+          </div>
+        </section>
+
+        <section className="px-4 py-10 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
+                  Vitrine
+                </p>
+                <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
+                  Banho de prata
+                </h2>
               </div>
-            ) : null}
+              <button
+                type="button"
+                onClick={() => handleCategoryRedirect('Semijoias de Prata')}
+                className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.09em] text-[var(--brand-deep)]"
+              >
+                Ver tudo
+              </button>
+            </div>
+
+            {renderProductShelf(silverProducts, 'Sem produtos de prata para este filtro.')}
           </div>
         </section>
 
@@ -872,72 +1260,7 @@ function App() {
               </button>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {noveltyProducts.map((product) => {
-                const isFavorite = favoriteIds.includes(product.id)
-
-                return (
-                  <article key={product.id} className="glass hover-lift animate-rise rounded-3xl p-5">
-                    <div className={`relative mb-5 aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br ${product.tone} p-4`}>
-                      <p className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">
-                        {product.badge}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => handleToggleFavorite(product)}
-                        className={`absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full transition ${
-                          isFavorite
-                            ? 'bg-[var(--brand-deep)] text-white'
-                            : 'bg-white/85 text-[var(--brand-deep)]'
-                        }`}
-                        aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                      >
-                        <Heart size={16} />
-                      </button>
-                    </div>
-
-                    <h3 className="text-lg font-semibold text-[var(--ink)]">{product.name}</h3>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
-                      {product.category}
-                    </p>
-
-                    <div className="mt-3 flex items-end gap-2">
-                      {product.oldPrice ? (
-                        <span className="text-sm text-[var(--muted)] line-through">{product.oldPrice}</span>
-                      ) : null}
-                      <span className="font-heading text-3xl leading-none text-[var(--ink)]">{product.price}</span>
-                    </div>
-
-                    <p className="mt-1 text-sm text-[var(--muted)]">{product.installment}</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--brand-deep)]">{product.pix}</p>
-
-                    <div className="mt-5 grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleAddToCart(product)}
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
-                      >
-                        Adicionar <ShoppingBag size={13} />
-                      </button>
-                      <a
-                        href={productWhatsAppLink(product)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--brand-soft)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)] transition hover:brightness-95"
-                      >
-                        Comprar <ExternalLink size={13} />
-                      </a>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-
-            {!noveltyProducts.length ? (
-              <div className="mt-5 rounded-3xl border border-[var(--line)] bg-white p-7 text-center text-sm text-[var(--muted)]">
-                Sem novidades para esse filtro agora.
-              </div>
-            ) : null}
+            {renderProductShelf(noveltyProducts, 'Sem novidades para esse filtro agora.')}
           </div>
         </section>
 
@@ -992,98 +1315,65 @@ function App() {
           </div>
         </section>
 
-        <section id="sacola" className="px-4 py-10 lg:px-8">
+        <section id="checkout" className="px-4 py-10 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
-                  Sacola
+                  Checkout
                 </p>
                 <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
-                  Fechamento rapido
+                  Carrinho lateral em 3 passos
                 </h2>
               </div>
-              <p className="text-sm text-[var(--muted)]">{cartCount} item(ns) selecionado(s)</p>
+              <p className="text-sm text-[var(--muted)]">{cartCount} item(ns) no carrinho</p>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-              <div className="glass rounded-3xl p-5 sm:p-6">
-                {cartItems.length ? (
-                  <div className="space-y-3">
-                    {cartItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--line)] bg-white px-4 py-3"
-                      >
-                        <div>
-                          <p className="text-sm font-semibold text-[var(--ink)]">{item.name}</p>
-                          <p className="text-xs text-[var(--muted)]">
-                            {item.quantity}x {item.price}
-                          </p>
-                        </div>
+            <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+              <article className="glass rounded-3xl p-5 sm:p-6">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-[var(--line)] bg-white p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">1</p>
+                    <h3 className="mt-2 text-sm font-semibold text-[var(--ink)]">Dados do cliente</h3>
+                    <p className="mt-1 text-xs text-[var(--muted)]">Nome, telefone e e-mail.</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--line)] bg-white p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">2</p>
+                    <h3 className="mt-2 text-sm font-semibold text-[var(--ink)]">Entrega</h3>
+                    <p className="mt-1 text-xs text-[var(--muted)]">CEP e endereco para envio.</p>
+                  </div>
+                  <div className="rounded-2xl border border-[var(--line)] bg-white p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">3</p>
+                    <h3 className="mt-2 text-sm font-semibold text-[var(--ink)]">Pagamento</h3>
+                    <p className="mt-1 text-xs text-[var(--muted)]">Pix, cartao ou boleto.</p>
+                  </div>
+                </div>
 
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-[var(--ink)]">
-                            {toCurrency(parseCurrency(item.price) * item.quantity)}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveFromCart(item.id)}
-                            className="rounded-full border border-[var(--line)] bg-white px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)]"
-                          >
-                            Remover
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="rounded-2xl border border-[var(--line)] bg-white px-4 py-5 text-sm text-[var(--muted)]">
-                    Sua sacola esta vazia. Adicione um produto para finalizar o pedido.
-                  </div>
-                )}
-              </div>
+                <p className="mt-4 text-sm text-[var(--muted)]">
+                  O cliente finaliza no painel lateral e o pedido vai pronto para atendimento no WhatsApp.
+                </p>
+              </article>
 
               <aside className="glass rounded-3xl p-5 sm:p-6">
-                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
-                  Resumo
-                </p>
-                <p className="mt-2 font-heading text-4xl leading-none text-[var(--ink)]">
-                  {toCurrency(cartTotal)}
-                </p>
+                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">Resumo</p>
+                <p className="mt-2 font-heading text-4xl leading-none text-[var(--ink)]">{toCurrency(cartTotal)}</p>
                 <p className="mt-2 text-xs text-[var(--muted)]">Pix ou cartao em ate 12x</p>
 
-                <a
-                  href={whatsappCheckoutLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(event) => {
-                    if (!cartItems.length) {
-                      event.preventDefault()
-                      notify('Adicione ao menos 1 item para finalizar.')
-                      return
-                    }
-
-                    notify('Redirecionando para o WhatsApp...', 'success')
-                  }}
-                  className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                    cartItems.length
-                      ? 'bg-[var(--ink)] text-white hover:opacity-90'
-                      : 'cursor-not-allowed bg-[#d5c3cc] text-white/85'
-                  }`}
+                <button
+                  type="button"
+                  onClick={handleOpenCart}
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--ink)] px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:opacity-90"
                 >
-                  Finalizar pedido <ExternalLink size={14} />
-                </a>
+                  Abrir carrinho lateral <ArrowRight size={14} />
+                </button>
 
-                {cartItems.length ? (
-                  <button
-                    type="button"
-                    onClick={handleClearCart}
-                    className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-[var(--line)] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)]"
-                  >
-                    Limpar sacola
-                  </button>
-                ) : null}
+                <button
+                  type="button"
+                  onClick={handleStartCheckout}
+                  className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-[var(--line)] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)]"
+                >
+                  Iniciar checkout
+                </button>
               </aside>
             </div>
           </div>
@@ -1164,7 +1454,10 @@ function App() {
         </section>
       </main>
 
-      <footer id="rodape" className="border-t border-[var(--line)] bg-[var(--surface-soft)] px-4 pb-10 pt-10 lg:px-8">
+      <footer
+        id="rodape"
+        className="border-t border-[var(--line)] bg-[var(--surface-soft)] px-4 pb-10 pt-10 lg:px-8"
+      >
         <div className="mx-auto grid max-w-7xl gap-8 text-sm text-[var(--muted)] sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <h3 className="font-heading text-3xl text-[var(--ink)]">Adry</h3>
@@ -1174,9 +1467,7 @@ function App() {
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ink)]">
-              Categorias
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ink)]">Categorias</p>
             <ul className="mt-3 space-y-2">
               {categories.map((category) => (
                 <li key={category.name}>
@@ -1208,11 +1499,7 @@ function App() {
                 </a>
               </li>
               <li>
-                <a
-                  href="https://wa.me/5571900000000"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://wa.me/5571900000000" target="_blank" rel="noreferrer">
                   Fale conosco
                 </a>
               </li>
@@ -1225,9 +1512,7 @@ function App() {
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ink)]">
-              Atendimento
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ink)]">Atendimento</p>
             <ul className="mt-3 space-y-2">
               <li>Seg a Sex · 08h as 17h</li>
               <li>WhatsApp: (71) 90000-0000</li>
@@ -1242,6 +1527,363 @@ function App() {
         </p>
       </footer>
 
+      <nav className="mobile-dock fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--line)] bg-[rgba(255,253,251,0.96)] px-2 py-2 lg:hidden">
+        <div className="mx-auto grid max-w-7xl grid-cols-4 gap-1">
+          <button
+            type="button"
+            onClick={() => scrollToSection('#top')}
+            className="inline-flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[0.62rem] font-bold uppercase tracking-[0.08em] text-[var(--muted)]"
+          >
+            <House size={15} />
+            Inicio
+          </button>
+
+          <button
+            type="button"
+            onClick={() => scrollToSection('#best-seller')}
+            className="inline-flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[0.62rem] font-bold uppercase tracking-[0.08em] text-[var(--muted)]"
+          >
+            <LayoutGrid size={15} />
+            Vitrines
+          </button>
+
+          <button
+            type="button"
+            onClick={() => scrollToSection('#novidades')}
+            className="inline-flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[0.62rem] font-bold uppercase tracking-[0.08em] text-[var(--muted)]"
+          >
+            <Sparkles size={15} />
+            Novidades
+          </button>
+
+          <button
+            type="button"
+            onClick={handleOpenCart}
+            className="relative inline-flex flex-col items-center justify-center gap-1 rounded-2xl bg-[var(--ink)] px-2 py-2 text-[0.62rem] font-bold uppercase tracking-[0.08em] text-white"
+          >
+            <ShoppingBag size={15} />
+            Carrinho
+            {cartCount > 0 ? (
+              <span className="absolute right-3 top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-[var(--brand-soft)] px-1 text-[0.55rem] font-bold text-[var(--brand-deep)]">
+                {cartCount}
+              </span>
+            ) : null}
+          </button>
+        </div>
+      </nav>
+
+      <div
+        className={`fixed inset-0 z-[70] transition ${
+          isCartOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
+        aria-hidden={!isCartOpen}
+      >
+        <button
+          type="button"
+          aria-label="Fechar carrinho"
+          onClick={handleCloseCart}
+          className={`absolute inset-0 bg-[#2f1a24]/45 transition-opacity ${
+            isCartOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        <aside
+          className={`absolute right-0 top-0 flex h-full w-full max-w-[440px] flex-col border-l border-[var(--line)] bg-[var(--surface-soft)] shadow-2xl transition-transform duration-300 ${
+            isCartOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          role="dialog"
+          aria-label="Carrinho lateral"
+        >
+          <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-4 sm:px-5">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[var(--muted)]">Seu carrinho</p>
+              <h3 className="font-heading text-3xl text-[var(--ink)]">Checkout</h3>
+            </div>
+            <button
+              type="button"
+              onClick={handleCloseCart}
+              aria-label="Fechar"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[var(--line)] bg-white text-[var(--ink)]"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {cartItems.length ? (
+            <>
+              <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-5">
+                <div className="space-y-3">
+                  {cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="rounded-2xl border border-[var(--line)] bg-white p-3"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-[var(--ink)]">{item.name}</p>
+                          <p className="mt-0.5 text-xs text-[var(--muted)]">{item.category}</p>
+                          <div className="mt-2 inline-flex items-center rounded-full border border-[var(--line)] bg-white">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateCartQuantity(item.id, -1)}
+                              className="grid h-8 w-8 place-items-center text-[var(--muted)]"
+                              aria-label="Diminuir"
+                            >
+                              <Minus size={14} />
+                            </button>
+                            <span className="w-7 text-center text-sm font-bold text-[var(--ink)]">
+                              {item.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateCartQuantity(item.id, 1)}
+                              className="grid h-8 w-8 place-items-center text-[var(--muted)]"
+                              aria-label="Aumentar"
+                            >
+                              <Plus size={14} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-sm font-bold text-[var(--ink)]">
+                            {toCurrency(parseCurrency(item.price) * item.quantity)}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveFromCart(item.id)}
+                            className="mt-2 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]"
+                          >
+                            Remover
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4 rounded-2xl border border-[var(--line)] bg-white px-4 py-3">
+                  <div className="flex items-center justify-between text-sm text-[var(--muted)]">
+                    <span>Subtotal</span>
+                    <span className="font-bold text-[var(--ink)]">{toCurrency(cartTotal)}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-xs text-[var(--muted)]">
+                    <span>Itens</span>
+                    <span>{cartCount}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-xs text-[var(--muted)]">
+                    <span>Frete</span>
+                    <span>Calculado no atendimento</span>
+                  </div>
+                  <p className="mt-1 text-xs text-[var(--muted)]">Pix com 3% OFF no atendimento.</p>
+                </div>
+
+                <div className="mt-4 flex items-center gap-2">
+                  {checkoutSteps.map((step, index) => {
+                    const isDone = checkoutStep > step.id
+                    const isActive = checkoutStep === step.id
+
+                    return (
+                      <div key={step.id} className="flex flex-1 items-center gap-2">
+                        <span
+                          className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border text-[0.62rem] font-bold ${
+                            isDone || isActive
+                              ? 'border-[var(--brand-deep)] bg-[var(--brand-soft)] text-[var(--brand-deep)]'
+                              : 'border-[var(--line)] bg-white text-[var(--muted)]'
+                          }`}
+                        >
+                          {isDone ? <CheckCircle2 size={12} /> : step.id}
+                        </span>
+                        <span
+                          className={`text-[0.62rem] font-bold uppercase tracking-[0.08em] ${
+                            isDone || isActive ? 'text-[var(--brand-deep)]' : 'text-[var(--muted)]'
+                          }`}
+                        >
+                          {step.label}
+                        </span>
+
+                        {index < checkoutSteps.length - 1 ? (
+                          <span className="h-px flex-1 bg-[var(--line)]" />
+                        ) : null}
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <div className="mt-3 rounded-2xl border border-[var(--line)] bg-white p-4">
+                  {checkoutStep === 1 ? (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        placeholder="Nome completo"
+                        value={checkoutData.fullName}
+                        onChange={(event) => handleCheckoutFieldChange('fullName', event.target.value)}
+                        className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Telefone"
+                        value={checkoutData.phone}
+                        onChange={(event) => handleCheckoutFieldChange('phone', event.target.value)}
+                        className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                      />
+                      <input
+                        type="email"
+                        placeholder="E-mail"
+                        value={checkoutData.email}
+                        onChange={(event) => handleCheckoutFieldChange('email', event.target.value)}
+                        className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                      />
+                    </div>
+                  ) : null}
+
+                  {checkoutStep === 2 ? (
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          placeholder="CEP"
+                          value={checkoutData.cep}
+                          onChange={(event) => handleCheckoutFieldChange('cep', event.target.value)}
+                          className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Numero"
+                          value={checkoutData.number}
+                          onChange={(event) => handleCheckoutFieldChange('number', event.target.value)}
+                          className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Rua"
+                        value={checkoutData.street}
+                        onChange={(event) => handleCheckoutFieldChange('street', event.target.value)}
+                        className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Bairro"
+                        value={checkoutData.neighborhood}
+                        onChange={(event) => handleCheckoutFieldChange('neighborhood', event.target.value)}
+                        className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                      />
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          placeholder="Cidade"
+                          value={checkoutData.city}
+                          onChange={(event) => handleCheckoutFieldChange('city', event.target.value)}
+                          className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="UF"
+                          value={checkoutData.state}
+                          onChange={(event) => handleCheckoutFieldChange('state', event.target.value)}
+                          className="h-10 w-full rounded-xl border border-[var(--line)] px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {checkoutStep === 3 ? (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-2">
+                        {(['Pix', 'Cartao', 'Boleto'] as CheckoutData['paymentMethod'][]).map((method) => (
+                          <button
+                            key={method}
+                            type="button"
+                            onClick={() => handleCheckoutFieldChange('paymentMethod', method)}
+                            className={`rounded-xl border px-2 py-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] ${
+                              checkoutData.paymentMethod === method
+                                ? 'border-[var(--brand-deep)] bg-[var(--brand-soft)] text-[var(--brand-deep)]'
+                                : 'border-[var(--line)] bg-white text-[var(--muted)]'
+                            }`}
+                          >
+                            {method}
+                          </button>
+                        ))}
+                      </div>
+
+                      <textarea
+                        placeholder="Observacoes do pedido (opcional)"
+                        value={checkoutData.note}
+                        onChange={(event) => handleCheckoutFieldChange('note', event.target.value)}
+                        rows={3}
+                        className="w-full rounded-xl border border-[var(--line)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-soft)]"
+                      />
+                    </div>
+                  ) : null}
+
+                  {checkoutError ? (
+                    <p className="mt-3 text-xs font-semibold text-[#8c2f4a]">{checkoutError}</p>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="border-t border-[var(--line)] p-4 sm:p-5">
+                <div className="flex gap-2">
+                  {checkoutStep > 1 ? (
+                    <button
+                      type="button"
+                      onClick={handlePreviousCheckoutStep}
+                      className="flex-1 rounded-full border border-[var(--line)] bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-[0.08em] text-[var(--ink)]"
+                    >
+                      Voltar
+                    </button>
+                  ) : null}
+
+                  {checkoutStep < 3 ? (
+                    <button
+                      type="button"
+                      onClick={handleNextCheckoutStep}
+                      className="flex-1 rounded-full bg-[var(--ink)] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.08em] text-white"
+                    >
+                      Continuar
+                    </button>
+                  ) : (
+                    <a
+                      href={checkoutWhatsAppLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={handleCheckoutFinalizeClick}
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[var(--ink)] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.08em] text-white"
+                    >
+                      Finalizar no WhatsApp <ExternalLink size={13} />
+                    </a>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleClearCart}
+                  className="mt-2 w-full rounded-full border border-[var(--line)] bg-white px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)]"
+                >
+                  Limpar carrinho
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+              <ShoppingBag size={34} className="text-[var(--muted)]" />
+              <p className="mt-3 text-lg font-semibold text-[var(--ink)]">Seu carrinho esta vazio</p>
+              <p className="mt-2 text-sm text-[var(--muted)]">
+                Adicione produtos para iniciar o checkout lateral.
+              </p>
+              <button
+                type="button"
+                onClick={handleCloseCart}
+                className="mt-4 rounded-full border border-[var(--line)] bg-white px-5 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)]"
+              >
+                Continuar comprando
+              </button>
+            </div>
+          )}
+        </aside>
+      </div>
+
       {notification ? (
         <div
           className={`fixed bottom-4 right-4 z-50 inline-flex max-w-xs items-center gap-2 rounded-2xl border px-4 py-3 text-sm shadow-xl animate-rise ${
@@ -1250,11 +1892,7 @@ function App() {
               : 'border-[var(--line)] bg-white text-[var(--ink)]'
           }`}
         >
-          {notification.type === 'success' ? (
-            <CheckCircle2 size={16} />
-          ) : (
-            <CircleAlert size={16} />
-          )}
+          {notification.type === 'success' ? <CheckCircle2 size={16} /> : <CircleAlert size={16} />}
           <span>{notification.message}</span>
         </div>
       ) : null}
