@@ -9,7 +9,6 @@ import {
   House,
   Heart,
   LayoutGrid,
-  Menu,
   Minus,
   Plus,
   Search,
@@ -108,14 +107,6 @@ const toCurrency = (value: number) =>
     style: 'currency',
     currency: 'BRL',
   })
-
-const navLinks = [
-  { label: 'INICIO', href: '#top' },
-  { label: 'COLECOES', href: '#colecoes' },
-  { label: 'BEST SELLER', href: '#best-seller' },
-  { label: 'NOVIDADES', href: '#novidades' },
-  { label: 'CHECKOUT', href: '#checkout' },
-]
 
 const categories: Category[] = [
   {
@@ -366,7 +357,6 @@ function ProductCard({
 }
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES)
   const [searchTerm, setSearchTerm] = useState('')
@@ -538,7 +528,6 @@ function App() {
     selector: string,
   ) => {
     event.preventDefault()
-    setIsMenuOpen(false)
     scrollToSection(selector)
   }
 
@@ -826,15 +815,6 @@ function App() {
       <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgba(255,253,251,0.94)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-8">
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              aria-label="Abrir menu"
-              onClick={() => setIsMenuOpen((state) => !state)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-[var(--line)] bg-white text-[var(--ink)] lg:hidden"
-            >
-              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-
             <a
               href="#top"
               onClick={(event) => handleNavRedirect(event, '#top')}
@@ -847,16 +827,32 @@ function App() {
             </a>
           </div>
 
-          <nav className="hidden items-center gap-6 text-sm font-bold tracking-[0.09em] text-[var(--muted)] lg:flex">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(event) => handleNavRedirect(event, link.href)}
-                className="transition hover:text-[var(--ink)]"
+          <nav className="hidden items-center gap-2 lg:flex">
+            <button
+              type="button"
+              onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
+              className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                activeCategory === ALL_CATEGORIES
+                  ? 'bg-[var(--brand-deep)] text-white'
+                  : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+              }`}
+            >
+              {ALL_CATEGORIES}
+            </button>
+
+            {categories.map((category) => (
+              <button
+                key={`header-${category.chip}`}
+                type="button"
+                onClick={() => handleCategoryRedirect(category.name)}
+                className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                  activeCategory === category.name
+                    ? 'bg-[var(--brand-deep)] text-white'
+                    : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                }`}
               >
-                {link.label}
-              </a>
+                {category.chip}
+              </button>
             ))}
           </nav>
 
@@ -911,79 +907,42 @@ function App() {
           </div>
         </div>
 
-        {isMenuOpen ? (
-          <div className="border-t border-[var(--line)] px-4 pb-4 pt-3 lg:hidden">
-            <form
-              onSubmit={handleSearchSubmit}
-              className="mb-3 flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm text-[var(--muted)]"
-            >
-              <Search size={16} />
-              <input
-                type="text"
-                placeholder="Buscar produto"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="w-full bg-transparent text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
-              />
-            </form>
-
-            <nav className="grid gap-2 text-sm font-semibold tracking-[0.08em] text-[var(--muted)]">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(event) => handleNavRedirect(event, link.href)}
-                  className="rounded-xl px-3 py-2 transition hover:bg-white"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-
-            <button
-              type="button"
-              onClick={handleOpenCart}
-              className="mt-3 w-full rounded-full bg-[var(--ink)] px-4 py-2 text-xs font-bold uppercase tracking-[0.09em] text-white"
-            >
-              Abrir carrinho
-            </button>
-          </div>
-        ) : null}
-      </header>
-
-      <main className="pb-24 lg:pb-16">
-        <section className="px-4 pb-1 pt-4 lg:px-8">
-          <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto pb-2">
+        <div className="border-t border-[var(--line)] lg:hidden">
+          <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto px-4 py-3">
             <div className="flex min-w-max items-center gap-2">
               <button
                 type="button"
                 onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-                className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)]"
+                className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                  activeCategory === ALL_CATEGORIES
+                    ? 'bg-[var(--brand-deep)] text-white'
+                    : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                }`}
               >
-                Todas categorias
+                {ALL_CATEGORIES}
               </button>
+
               {categories.map((category) => (
                 <button
-                  key={`quick-${category.name}`}
+                  key={`mobile-header-${category.chip}`}
                   type="button"
                   onClick={() => handleCategoryRedirect(category.name)}
-                  className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)]"
+                  className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                    activeCategory === category.name
+                      ? 'bg-[var(--brand-deep)] text-white'
+                      : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                  }`}
                 >
-                  {category.name}
+                  {category.chip}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={handleOpenCart}
-                className="rounded-full bg-[var(--ink)] px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.09em] text-white"
-              >
-                Ir para checkout
-              </button>
             </div>
           </div>
-        </section>
+        </div>
+      </header>
 
-        <section className="px-4 pb-5 lg:px-8">
+      <main className="pb-24 lg:pb-16">
+        <section className="px-4 pb-5 pt-4 lg:px-8 lg:pt-6">
           <div className="mx-auto grid max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <article className="glass rounded-3xl px-5 py-4">
               <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
@@ -1011,72 +970,6 @@ function App() {
                 Atendimento dedicado para trocas, duvidas e pos-venda.
               </p>
             </article>
-          </div>
-        </section>
-
-        <section id="colecoes" className="px-4 py-10 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
-                  Categorias
-                </p>
-                <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
-                  Encontre por estilo
-                </h2>
-              </div>
-              <p className="max-w-md text-sm text-[var(--muted)]">
-                Selecao rapida no mesmo estilo da vitrine principal de e-commerce.
-              </p>
-            </div>
-
-            <div className="mb-4 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-                className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                  activeCategory === ALL_CATEGORIES
-                    ? 'bg-[var(--brand-deep)] text-white'
-                    : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
-                }`}
-              >
-                {ALL_CATEGORIES}
-              </button>
-
-              {categories.map((category) => (
-                <button
-                  key={category.name}
-                  type="button"
-                  onClick={() => handleCategoryRedirect(category.name)}
-                  className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                    activeCategory === category.name
-                      ? 'bg-[var(--brand-deep)] text-white'
-                      : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
-                  }`}
-                >
-                  {category.chip}
-                </button>
-              ))}
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {categories.map((category) => (
-                <article key={category.name} className="glass hover-lift animate-rise rounded-3xl p-5">
-                  <p className="inline-flex rounded-full bg-[var(--brand-soft)] px-3 py-1 text-[0.63rem] font-bold uppercase tracking-[0.11em] text-[var(--brand-deep)]">
-                    {category.chip}
-                  </p>
-                  <h3 className="mt-4 text-lg font-semibold text-[var(--ink)]">{category.name}</h3>
-                  <p className="mt-2 text-sm text-[var(--muted)]">{category.subtitle}</p>
-                  <button
-                    type="button"
-                    onClick={() => handleCategoryRedirect(category.name)}
-                    className="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]"
-                  >
-                    Ver produtos <ArrowRight size={13} />
-                  </button>
-                </article>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -1509,7 +1402,7 @@ function App() {
           type="button"
           aria-label="Fechar carrinho"
           onClick={handleCloseCart}
-          className={`absolute inset-0 bg-[#2f1a24]/45 transition-opacity ${
+          className={`absolute inset-0 bg-[#8a4a64]/45 transition-opacity ${
             isCartOpen ? 'opacity-100' : 'opacity-0'
           }`}
         />
@@ -1745,7 +1638,7 @@ function App() {
                   ) : null}
 
                   {checkoutError ? (
-                    <p className="mt-3 text-xs font-semibold text-[#8c2f4a]">{checkoutError}</p>
+                    <p className="mt-3 text-xs font-semibold text-[#a45777]">{checkoutError}</p>
                   ) : null}
                 </div>
               </div>
