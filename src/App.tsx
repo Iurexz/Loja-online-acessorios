@@ -770,26 +770,31 @@ function App() {
   return (
     <div id="top" className="min-h-screen">
       <div className="bg-[var(--brand-deep)] text-white">
-        <div className="mx-auto max-w-7xl px-4 py-2 lg:px-8">
-          <div className="flex flex-wrap items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.11em] sm:justify-between sm:text-xs">
-            <span className="rounded-full bg-white/12 px-3 py-1">Frete fixo RJ 10,90 | SP 19,90</span>
-            <div className="w-full overflow-hidden sm:w-auto sm:flex-1 sm:px-4">
+        <div className="mx-auto max-w-7xl px-4 py-1.5 sm:py-2 lg:px-8">
+          <div className="flex items-center justify-between gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.09em] sm:flex-wrap sm:gap-3 sm:text-xs sm:tracking-[0.11em]">
+            <span className="hidden rounded-full bg-white/12 px-3 py-1 sm:inline-flex">
+              Frete fixo RJ 10,90 | SP 19,90
+            </span>
+            <span className="sm:hidden">Frete RJ/SP + Pix 3% off</span>
+
+            <div className="hidden w-full overflow-hidden sm:block sm:w-auto sm:flex-1 sm:px-4">
               <p className="ticker-track whitespace-nowrap text-center">
                 Entrega para todo Brasil · 3% OFF no Pix · Em ate 12x no cartao · Garantia em todas as pecas
               </p>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 type="button"
                 onClick={() => scrollToSection('#checkout')}
-                className="rounded-full bg-white/10 px-3 py-1 transition hover:bg-white/20"
+                className="rounded-full bg-white/10 px-2.5 py-0.5 text-[0.62rem] normal-case tracking-[0.02em] transition hover:bg-white/20 sm:px-3 sm:py-1 sm:text-xs sm:uppercase sm:tracking-[0.08em]"
               >
                 Rastrear pedido
               </button>
               <button
                 type="button"
                 onClick={handleOpenCart}
-                className="rounded-full bg-white/15 px-3 py-1 transition hover:bg-white/20"
+                className="rounded-full bg-white/15 px-2.5 py-0.5 text-[0.62rem] normal-case tracking-[0.02em] transition hover:bg-white/20 sm:px-3 sm:py-1 sm:text-xs sm:uppercase sm:tracking-[0.08em]"
               >
                 Abrir carrinho
               </button>
@@ -799,7 +804,7 @@ function App() {
       </div>
 
       <div className="border-b border-[var(--line)] bg-[var(--surface-soft)]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.11em] text-[var(--muted)] sm:text-xs lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-4 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.09em] text-[var(--muted)] sm:gap-x-5 sm:gap-y-2 sm:py-3 sm:text-xs sm:tracking-[0.11em] lg:px-8">
           <span className="inline-flex items-center gap-2">
             <Truck size={14} /> entrega em todo o Brasil
           </span>
@@ -942,31 +947,31 @@ function App() {
       </header>
 
       <main className="pb-24 lg:pb-16">
-        <section className="px-4 pb-5 pt-4 lg:px-8 lg:pt-6">
-          <div className="mx-auto grid max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <article className="glass rounded-3xl px-5 py-4">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
+        <section className="px-4 pb-4 pt-3 sm:pb-5 sm:pt-4 lg:px-8 lg:pt-6">
+          <div className="no-scrollbar mx-auto flex max-w-7xl gap-3 overflow-x-auto pb-1 sm:grid sm:gap-4 sm:overflow-visible sm:pb-0 sm:grid-cols-2 lg:grid-cols-3">
+            <article className="glass min-w-[86%] rounded-2xl px-4 py-3 sm:min-w-0 sm:rounded-3xl sm:px-5 sm:py-4">
+              <p className="text-[0.64rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)] sm:text-[0.68rem] sm:tracking-[0.1em]">
                 Frete para todo Brasil
               </p>
-              <p className="mt-2 text-sm font-semibold text-[var(--ink)]">
+              <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
                 RJ e SP com condicoes especiais e envio rapido.
               </p>
             </article>
 
-            <article className="glass rounded-3xl px-5 py-4">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
+            <article className="glass min-w-[86%] rounded-2xl px-4 py-3 sm:min-w-0 sm:rounded-3xl sm:px-5 sm:py-4">
+              <p className="text-[0.64rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)] sm:text-[0.68rem] sm:tracking-[0.1em]">
                 Formas de pagamento
               </p>
-              <p className="mt-2 text-sm font-semibold text-[var(--ink)]">
+              <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
                 Em ate 12x no cartao e 3% OFF no Pix no atendimento.
               </p>
             </article>
 
-            <article className="glass rounded-3xl px-5 py-4 sm:col-span-2 lg:col-span-1">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-[var(--muted)]">
+            <article className="glass min-w-[86%] rounded-2xl px-4 py-3 sm:min-w-0 sm:rounded-3xl sm:px-5 sm:py-4 sm:col-span-2 lg:col-span-1">
+              <p className="text-[0.64rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)] sm:text-[0.68rem] sm:tracking-[0.1em]">
                 Garantia e suporte
               </p>
-              <p className="mt-2 text-sm font-semibold text-[var(--ink)]">
+              <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
                 Atendimento dedicado para trocas, duvidas e pos-venda.
               </p>
             </article>
