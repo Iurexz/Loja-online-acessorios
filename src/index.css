@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amita:wght@400;700&family=Averia+Serif+Libre:wght@400;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --font-heading: 'Cormorant Garamond', serif;
-  --font-body: 'Cormorant Garamond', sans-serif;
+  --font-heading: 'Amita', cursive;
+  --font-body: 'Averia Serif Libre', serif;
   --surface: #f873a6;
   --surface-soft: #fffbfd;
   --ink: #f873a6;
