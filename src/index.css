@@ -52,20 +52,12 @@ a {
     font-family: var(--font-heading);
   }
 
-  .shadow-xl {
-    --tw-shadow-color: rgba(248, 187, 208, 0.28);
-  }
-
-  .shadow-2xl {
-    --tw-shadow-color: rgba(248, 187, 208, 0.34);
-  }
-
   .glass {
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 241, 248, 0.95));
     border: 1px solid rgba(236, 198, 214, 0.66);
     box-shadow:
-      0 18px 50px rgba(248, 187, 208, 0.34),
-      0 6px 18px rgba(248, 187, 208, 0.22),
+      0 18px 50px rgba(103, 63, 80, 0.14),
+      0 6px 18px rgba(103, 63, 80, 0.08),
       inset 0 1px 0 rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(4px);
   }
@@ -84,8 +76,8 @@ a {
   .hover-lift:hover {
     transform: translateY(-4px);
     box-shadow:
-      0 28px 60px rgba(248, 187, 208, 0.42),
-      0 10px 24px rgba(248, 187, 208, 0.28),
+      0 28px 60px rgba(120, 72, 95, 0.18),
+      0 10px 24px rgba(120, 72, 95, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.95);
   }
 
@@ -119,8 +111,8 @@ a {
     border-radius: 1rem 1rem 0 0;
     overflow: hidden;
     box-shadow:
-      0 -18px 44px rgba(248, 187, 208, 0.38),
-      0 -6px 16px rgba(248, 187, 208, 0.26),
+      0 -18px 44px rgba(112, 68, 89, 0.16),
+      0 -6px 16px rgba(112, 68, 89, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.85);
   }
 }

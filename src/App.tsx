@@ -317,7 +317,7 @@ function ProductCard({
         </button>
       </div>
 
-      <h3 className="text-base font-semibold leading-snug text-[var(--ink)] sm:text-lg">
+      <h3 className="text-sm font-normal leading-snug text-[var(--ink)] sm:text-base">
         {product.name}
       </h3>
 
@@ -327,18 +327,12 @@ function ProductCard({
             {product.oldPrice}
           </span>
         ) : null}
-        <span className="font-heading text-2xl leading-none text-[var(--ink)] sm:text-3xl">
+        <span className="font-heading text-xl font-bold leading-none text-[var(--ink)] sm:text-2xl">
           {product.price}
         </span>
       </div>
 
-      <div className="mt-2 flex items-center gap-1 text-[var(--brand)]">
-        {Array.from({ length: 5 }).map((_, index) => (
-          <Star key={`${product.id}-star-${index}`} size={12} fill="currentColor" />
-        ))}
-      </div>
-
-      <p className="mt-1 text-xs text-[var(--muted)] sm:text-sm">{product.installment}</p>
+      <p className="mt-2 text-xs text-[var(--muted)] sm:text-sm">{product.installment}</p>
       <p className="mt-1 text-xs font-semibold text-[var(--brand-deep)] sm:text-sm">{product.pix}</p>
 
       <div className="mt-4 grid gap-2 sm:mt-5 sm:grid-cols-2">
