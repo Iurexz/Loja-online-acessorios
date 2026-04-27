@@ -5,12 +5,12 @@
   --font-heading: 'Ubuntu', sans-serif;
   --font-body: 'Averia Serif Libre', serif;
   --surface: #d86487;
-  --surface-soft: #FFF8F0;
+  --surface-soft: #ffffff;
   --ink: #d86487;
   --muted: #d86487;
-  --line: #FFF8F0;
+  --line: #ffffff;
   --brand: #d86487;
-  --brand-soft: #FFF8F0;
+  --brand-soft: #ffffff;
   --brand-deep: #d86487;
 }
 
@@ -38,8 +38,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  color: inherit;
+@layer base {
+  a {
+    color: inherit;
+  }
 }
 
 ::selection {
@@ -53,8 +55,8 @@ a {
   }
 
   .glass {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 241, 248, 0.95));
-    border: 1px solid rgba(236, 198, 214, 0.66);
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     /* box-shadow:
       0 18px 50px rgba(103, 63, 80, 0.14),
       0 6px 18px rgba(103, 63, 80, 0.08),

@@ -294,7 +294,7 @@ function ProductCard({
   return (
     <article className="glass hover-lift animate-rise rounded-3xl p-4 sm:p-5">
       <div
-        className={`relative mb-4 aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br ${product.tone} p-3 sm:mb-5 sm:p-4`}
+        className="relative mb-4 aspect-[4/5] overflow-hidden rounded-2xl border border-black/5 bg-white p-3 sm:mb-5 sm:p-4"
       >
         <p className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">
           {product.badge}
@@ -339,7 +339,7 @@ function ProductCard({
         <button
           type="button"
           onClick={() => onAddToCart(product)}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-white transition hover:brightness-95 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
           ADICIONAR <ShoppingBag size={13} />
         </button>
@@ -347,7 +347,7 @@ function ProductCard({
           href={productWhatsAppLink(product)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-[var(--brand-deep)] transition hover:bg-[var(--brand-deep)] hover:text-white sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] !text-white transition hover:brightness-95 hover:!text-white sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
           COMPRAR <ExternalLink size={13} />
         </a>
