@@ -6,12 +6,12 @@
   --font-body: 'Averia Serif Libre', serif;
   --surface: #F8BBD0;
   --surface-soft: #FFF8F0;
-  --ink: #F8BBD0;
-  --muted: #F8BBD0;
+  --ink: #d86487;
+  --muted: #d86487;
   --line: #FFF8F0;
   --brand: #F8BBD0;
   --brand-soft: #FFF8F0;
-  --brand-deep: #ffb7c5;
+  --brand-deep: #d86487;
 }
 
 * {
