@@ -292,9 +292,9 @@ function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <article className="glass hover-lift animate-rise rounded-3xl p-5">
+    <article className="glass hover-lift animate-rise rounded-3xl p-4 sm:p-5">
       <div
-        className={`relative mb-5 aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br ${product.tone} p-4`}
+        className={`relative mb-4 aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br ${product.tone} p-3 sm:mb-5 sm:p-4`}
       >
         <p className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">
           {product.badge}
@@ -306,7 +306,7 @@ function ProductCard({
         <button
           type="button"
           onClick={() => onToggleFavorite(product)}
-          className={`absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full transition ${
+          className={`absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full transition sm:h-9 sm:w-9 ${
             isFavorite
               ? 'bg-[var(--brand-deep)] text-white'
               : 'bg-white/85 text-[var(--brand-deep)]'
@@ -317,13 +317,19 @@ function ProductCard({
         </button>
       </div>
 
-      <h3 className="text-lg font-semibold text-[var(--ink)]">{product.name}</h3>
+      <h3 className="text-base font-semibold leading-snug text-[var(--ink)] sm:text-lg">
+        {product.name}
+      </h3>
 
       <div className="mt-3 flex items-end gap-2">
         {product.oldPrice ? (
-          <span className="text-sm text-[var(--muted)] line-through">{product.oldPrice}</span>
+          <span className="text-xs text-[var(--muted)] line-through sm:text-sm">
+            {product.oldPrice}
+          </span>
         ) : null}
-        <span className="font-heading text-3xl leading-none text-[var(--ink)]">{product.price}</span>
+        <span className="font-heading text-2xl leading-none text-[var(--ink)] sm:text-3xl">
+          {product.price}
+        </span>
       </div>
 
       <div className="mt-2 flex items-center gap-1 text-[var(--brand)]">
@@ -332,14 +338,14 @@ function ProductCard({
         ))}
       </div>
 
-      <p className="mt-1 text-sm text-[var(--muted)]">{product.installment}</p>
-      <p className="mt-1 text-sm font-semibold text-[var(--brand-deep)]">{product.pix}</p>
+      <p className="mt-1 text-xs text-[var(--muted)] sm:text-sm">{product.installment}</p>
+      <p className="mt-1 text-xs font-semibold text-[var(--brand-deep)] sm:text-sm">{product.pix}</p>
 
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="mt-4 grid gap-2 sm:mt-5 sm:grid-cols-2">
         <button
           type="button"
           onClick={() => onAddToCart(product)}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
           ADICIONAR <ShoppingBag size={13} />
         </button>
@@ -347,7 +353,7 @@ function ProductCard({
           href={productWhatsAppLink(product)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--brand-soft)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)] transition hover:brightness-95"
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-white px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-[var(--brand-deep)] transition hover:bg-[var(--brand-deep)] hover:text-white sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
           COMPRAR <ExternalLink size={13} />
         </a>
@@ -753,7 +759,7 @@ function App() {
     }
 
     return (
-      <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((product) => (
           <ProductCard
             key={product.id}
