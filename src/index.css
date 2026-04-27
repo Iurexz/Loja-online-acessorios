@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Amita:wght@400;700&family=Averia+Serif+Libre:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&family=Averia+Serif+Libre:wght@400;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --font-heading: 'Amita', cursive;
+  --font-heading: 'Ubuntu', sans-serif;
   --font-body: 'Averia Serif Libre', serif;
-  --surface: #f873a6;
+  --surface: #F8BBD0;
   --surface-soft: #fffbfd;
-  --ink: #f873a6;
-  --muted: #f873a6;
+  --ink: #F8BBD0;
+  --muted: #F8BBD0;
   --line: #fffbfd;
-  --brand: #f873a6;
+  --brand: #F8BBD0;
   --brand-soft: #fffbfd;
   --brand-deep: #ffb7c5;
 }
@@ -34,9 +34,9 @@ body {
   color: var(--ink);
   background-color: var(--surface);
   background-image:
-    radial-gradient(80rem 50rem at 100% -10%, rgba(255, 217, 231, 0.76) 0%, transparent 52%),
-    radial-gradient(70rem 45rem at -10% 10%, rgba(255, 234, 243, 0.72) 0%, transparent 52%),
-    linear-gradient(170deg, #fff4f9 0%, #fff9fc 100%);
+    radial-gradient(80rem 50rem at 100% -10%, rgba(255, 255, 255, 0.76) 0%, transparent 52%),
+    radial-gradient(70rem 45rem at -10% 10%, rgba(255, 255, 255, 0.72) 0%, transparent 52%),
+    linear-gradient(170deg, #fff4f9 0%, #ffffff 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
