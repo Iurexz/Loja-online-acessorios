@@ -19,56 +19,13 @@ import {
   Truck,
   X,
 } from 'lucide-react'
-
-type Category = {
-  name: string
-  subtitle: string
-  chip: string
-}
-
-type Product = {
-  id: string
-  name: string
-  category: string
-  price: string
-  oldPrice?: string
-  pix: string
-  installment: string
-  badge: 'Best Seller' | 'Novidade' | 'Reposicao'
-  tone: string
-}
-
-type Review = {
-  name: string
-  city: string
-  quote: string
-  rating: number
-}
-
-type Notification = {
-  type: 'success' | 'info'
-  message: string
-}
-
-type CartItem = Product & {
-  quantity: number
-}
-
-type CheckoutStep = 1 | 2 | 3
-
-type CheckoutData = {
-  fullName: string
-  phone: string
-  email: string
-  cep: string
-  street: string
-  number: string
-  neighborhood: string
-  city: string
-  state: string
-  note: string
-  paymentMethod: 'Pix' | 'Cartao' | 'Boleto'
-}
+import { buildWhatsAppUrl, storeConfig } from './config/storefront'
+import { ALL_CATEGORIES, checkoutSteps, initialCheckoutData } from './data/checkout'
+import { useStorefront } from './hooks/useStorefront'
+import { parseCurrency, toCurrency } from './lib/currency'
+import { createOrderDraft, formatCheckoutWhatsAppMessage } from './services/orderDraft'
+import { storeRepository } from './services/storeRepository'
+import type { CartItem, CheckoutData, CheckoutStep, Notification, Product } from './types/store'
 
 type ProductCardProps = {
   product: Product
@@ -77,212 +34,8 @@ type ProductCardProps = {
   onAddToCart: (product: Product) => void
 }
 
-const ALL_CATEGORIES = 'Todas'
-
-const initialCheckoutData: CheckoutData = {
-  fullName: '',
-  phone: '',
-  email: '',
-  cep: '',
-  street: '',
-  number: '',
-  neighborhood: '',
-  city: '',
-  state: '',
-  note: '',
-  paymentMethod: 'Pix',
-}
-
-const checkoutSteps: Array<{ id: CheckoutStep; label: string }> = [
-  { id: 1, label: 'Dados' },
-  { id: 2, label: 'Entrega' },
-  { id: 3, label: 'Pagamento' },
-]
-
-const parseCurrency = (value: string) =>
-  Number(value.replace('R$', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.'))
-
-const toCurrency = (value: number) =>
-  value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })
-
-const categories: Category[] = [
-  {
-    name: 'Semijoias de Prata',
-    subtitle: 'Pecas leves para usar todo dia.',
-    chip: 'PRATA',
-  },
-  {
-    name: 'Semijoias de Ouro',
-    subtitle: 'Brilho dourado com acabamento premium.',
-    chip: 'OURO',
-  },
-  {
-    name: 'Linha Infantil',
-    subtitle: 'Modelos delicados para presentes.',
-    chip: 'INFANTIL',
-  },
-  {
-    name: 'Personalizados',
-    subtitle: 'Nomes e simbolos com toque unico.',
-    chip: 'PERSONALIZE',
-  },
-]
-
-const products: Product[] = [
-  {
-    id: 'p1',
-    name: 'Choker Fita Dourada',
-    category: 'Semijoias de Ouro',
-    oldPrice: 'R$ 24,90',
-    price: 'R$ 19,90',
-    pix: 'R$ 19,30 no Pix (-3%)',
-    installment: '2x de R$ 9,95 sem juros',
-    badge: 'Best Seller',
-    tone: 'from-[#f7e5ed] via-[#fdf8fb] to-[#e7c4d5]',
-  },
-  {
-    id: 'p2',
-    name: 'Colar Riviera Cristal',
-    category: 'Semijoias de Prata',
-    price: 'R$ 21,90',
-    pix: 'R$ 21,24 no Pix (-3%)',
-    installment: '2x de R$ 10,95 sem juros',
-    badge: 'Best Seller',
-    tone: 'from-[#f5e1ea] via-[#fff9fb] to-[#dfb7ca]',
-  },
-  {
-    id: 'p3',
-    name: 'Pulseira Coracao Pink',
-    category: 'Linha Infantil',
-    price: 'R$ 17,90',
-    pix: 'R$ 17,36 no Pix (-3%)',
-    installment: '2x de R$ 8,95 sem juros',
-    badge: 'Reposicao',
-    tone: 'from-[#fbe7ef] via-[#fff8fb] to-[#eec7d8]',
-  },
-  {
-    id: 'p4',
-    name: 'Argola Bolinhas Prata',
-    category: 'Semijoias de Prata',
-    price: 'R$ 19,90',
-    pix: 'R$ 19,30 no Pix (-3%)',
-    installment: '2x de R$ 9,95 sem juros',
-    badge: 'Best Seller',
-    tone: 'from-[#f5dfe9] via-[#fff8fb] to-[#e7c2d3]',
-  },
-  {
-    id: 'p5',
-    name: 'Colar Letra Cravejada',
-    category: 'Personalizados',
-    oldPrice: 'R$ 29,90',
-    price: 'R$ 24,90',
-    pix: 'R$ 24,15 no Pix (-3%)',
-    installment: '2x de R$ 12,45 sem juros',
-    badge: 'Best Seller',
-    tone: 'from-[#f6e7ed] via-[#fff8f9] to-[#e4bfd1]',
-  },
-  {
-    id: 'p6',
-    name: 'Choker Coracoes Lisos',
-    category: 'Semijoias de Prata',
-    price: 'R$ 19,90',
-    pix: 'R$ 19,30 no Pix (-3%)',
-    installment: '2x de R$ 9,95 sem juros',
-    badge: 'Reposicao',
-    tone: 'from-[#f4dce8] via-[#fff8fb] to-[#ddb3c7]',
-  },
-  {
-    id: 'p7',
-    name: 'Colar Mae + Filho',
-    category: 'Personalizados',
-    price: 'R$ 22,90',
-    pix: 'R$ 22,21 no Pix (-3%)',
-    installment: '2x de R$ 11,45 sem juros',
-    badge: 'Novidade',
-    tone: 'from-[#f8e8ef] via-[#fff9fc] to-[#ebcddb]',
-  },
-  {
-    id: 'p8',
-    name: 'Anel Princesa Azul',
-    category: 'Semijoias de Prata',
-    price: 'R$ 18,90',
-    pix: 'R$ 18,33 no Pix (-3%)',
-    installment: '2x de R$ 9,45 sem juros',
-    badge: 'Novidade',
-    tone: 'from-[#f5e2ea] via-[#fff9fc] to-[#e4bfd0]',
-  },
-  {
-    id: 'p9',
-    name: 'Pulseira Medalhas Dourada',
-    category: 'Semijoias de Ouro',
-    price: 'R$ 21,90',
-    pix: 'R$ 21,24 no Pix (-3%)',
-    installment: '2x de R$ 10,95 sem juros',
-    badge: 'Novidade',
-    tone: 'from-[#f7e8ef] via-[#fffafc] to-[#e8c8d8]',
-  },
-  {
-    id: 'p10',
-    name: 'Brinco Gota Amassadinho',
-    category: 'Semijoias de Prata',
-    price: 'R$ 19,90',
-    pix: 'R$ 19,30 no Pix (-3%)',
-    installment: '2x de R$ 9,95 sem juros',
-    badge: 'Novidade',
-    tone: 'from-[#f4dae6] via-[#fff8fb] to-[#dfb7ca]',
-  },
-  {
-    id: 'p11',
-    name: 'Colar Longo Medalhas',
-    category: 'Semijoias de Ouro',
-    oldPrice: 'R$ 39,90',
-    price: 'R$ 36,90',
-    pix: 'R$ 35,79 no Pix (-3%)',
-    installment: '2x de R$ 18,45 sem juros',
-    badge: 'Novidade',
-    tone: 'from-[#f8e9ef] via-[#fff9fb] to-[#ebc8d9]',
-  },
-  {
-    id: 'p12',
-    name: 'Kit Mae + Filha',
-    category: 'Linha Infantil',
-    price: 'R$ 29,90',
-    pix: 'R$ 29,00 no Pix (-3%)',
-    installment: '2x de R$ 14,95 sem juros',
-    badge: 'Novidade',
-    tone: 'from-[#fbeaf1] via-[#fffafe] to-[#efcfde]',
-  },
-]
-
-const reviews: Review[] = [
-  {
-    name: 'Pamela Lima',
-    city: 'Rio de Janeiro, RJ',
-    quote: 'As pecas sao lindas e chegaram muito rapido. Atendimento excelente!',
-    rating: 5,
-  },
-  {
-    name: 'Jessica Souza',
-    city: 'Belo Horizonte, MG',
-    quote: 'Qualidade muito boa, nao escureceu e veio com cheirinho maravilhoso.',
-    rating: 5,
-  },
-  {
-    name: 'Miria Menezes',
-    city: 'Salvador, BA',
-    quote: 'Site facil de usar e as fotos batem com o produto real. Recomendo demais.',
-    rating: 5,
-  },
-]
-
 const productWhatsAppLink = (product: Product) => {
-  const message = encodeURIComponent(
-    `Oi! Quero comprar ${product.name} por ${product.price}. Pode me ajudar?`,
-  )
-  return `https://wa.me/5571900000000?text=${message}`
+  return buildWhatsAppUrl(`Oi! Quero comprar ${product.name} por ${product.price}. Pode me ajudar?`)
 }
 
 function ProductCard({
@@ -292,14 +45,14 @@ function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <article className="glass hover-lift animate-rise rounded-3xl p-4 sm:p-5">
+    <article className="glass hover-lift animate-rise rounded-3xl p-3 sm:p-5">
       <div
-        className="relative mb-4 aspect-[4/5] overflow-hidden rounded-2xl border border-black/5 bg-white p-3 sm:mb-5 sm:p-4"
+        className="relative mb-3 aspect-square overflow-hidden rounded-2xl border border-black/5 bg-white p-2.5 sm:mb-5 sm:aspect-[4/5] sm:p-4"
       >
-        <p className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-[var(--brand-deep)]">
+        <p className="absolute left-2 top-2 rounded-full bg-white/85 px-2 py-1 text-[0.56rem] font-bold uppercase leading-none tracking-[0.08em] text-[var(--brand-deep)] sm:left-3 sm:top-3 sm:px-2.5 sm:text-[0.63rem] sm:tracking-[0.1em]">
           {product.badge}
         </p>
-        <p className="absolute right-3 top-3 rounded-full bg-[var(--ink)] px-2.5 py-1 text-[0.63rem] font-bold uppercase tracking-[0.1em] text-white">
+        <p className="absolute right-2 top-2 flex min-h-7 max-w-[6.2rem] items-center justify-center rounded-full bg-[var(--ink)] px-2.5 py-1 text-center text-[0.52rem] font-bold uppercase leading-tight tracking-[0.06em] text-white sm:right-3 sm:top-3 sm:max-w-[8rem] sm:text-[0.63rem] sm:tracking-[0.1em]">
           {product.category}
         </p>
 
@@ -317,39 +70,41 @@ function ProductCard({
         </button>
       </div>
 
-      <h3 className="text-sm font-normal leading-snug text-[var(--ink)] sm:text-base">
+      <h3 className="text-[0.82rem] font-normal leading-snug text-[var(--ink)] sm:text-base">
         {product.name}
       </h3>
 
-      <div className="mt-3 flex items-end gap-2">
+      <div className="mt-2 flex items-end gap-1.5 sm:mt-3 sm:gap-2">
         {product.oldPrice ? (
-          <span className="text-xs text-[var(--muted)] line-through sm:text-sm">
+          <span className="text-[0.68rem] text-[var(--muted)] line-through sm:text-sm">
             {product.oldPrice}
           </span>
         ) : null}
-        <span className="font-heading text-xl font-bold leading-none text-[var(--ink)] sm:text-2xl">
+        <span className="font-heading text-[1.18rem] font-bold leading-none text-[var(--ink)] sm:text-2xl">
           {product.price}
         </span>
       </div>
 
-      <p className="mt-2 text-xs text-[var(--muted)] sm:text-sm">{product.installment}</p>
-      <p className="mt-1 text-xs font-semibold text-[var(--brand-deep)] sm:text-sm">{product.pix}</p>
+      <div className="mt-2 space-y-0.5 text-left font-heading leading-tight">
+        <p className="text-[0.62rem] text-[var(--muted)] sm:text-xs">{product.installment}</p>
+        <p className="text-[0.64rem] font-bold text-[var(--brand-deep)] sm:text-xs">{product.pix}</p>
+      </div>
 
-      <div className="mt-4 grid gap-2 sm:mt-5 sm:grid-cols-2">
+      <div className="mt-3 grid gap-2 sm:mt-5 sm:grid-cols-2">
         <button
           type="button"
           onClick={() => onAddToCart(product)}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-white transition hover:brightness-95 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2.5 py-2 text-[0.62rem] font-bold uppercase tracking-[0.04em] text-white transition hover:brightness-95 sm:gap-2 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
-          ADICIONAR <ShoppingBag size={13} />
+          ADICIONAR <ShoppingBag size={12} />
         </button>
         <a
           href={productWhatsAppLink(product)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.06em] !text-white transition hover:brightness-95 hover:!text-white sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2.5 py-2 text-[0.62rem] font-bold uppercase tracking-[0.04em] !text-white transition hover:brightness-95 hover:!text-white sm:gap-2 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
-          COMPRAR <ExternalLink size={13} />
+          COMPRAR <ExternalLink size={12} />
         </a>
       </div>
     </article>
@@ -368,6 +123,7 @@ function App() {
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterFeedback, setNewsletterFeedback] = useState<string | null>(null)
   const [notification, setNotification] = useState<Notification | null>(null)
+  const { categories, products, reviews } = useStorefront()
 
   const filteredProducts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase()
@@ -380,7 +136,7 @@ function App() {
 
       return matchesCategory && matchesQuery
     })
-  }, [activeCategory, searchTerm])
+  }, [activeCategory, products, searchTerm])
 
   const bestSellerProducts = useMemo(() => {
     const selected = filteredProducts.filter(
@@ -406,7 +162,7 @@ function App() {
 
   const favoriteProducts = useMemo(
     () => products.filter((product) => favoriteIds.includes(product.id)),
-    [favoriteIds],
+    [favoriteIds, products],
   )
 
   const cartItems = useMemo<CartItem[]>(
@@ -417,7 +173,7 @@ function App() {
           ...product,
           quantity: cart[product.id] as number,
         })),
-    [cart],
+    [cart, products],
   )
 
   const cartCount = useMemo(
@@ -434,45 +190,15 @@ function App() {
     [cartItems],
   )
 
-  const checkoutWhatsAppLink = useMemo(() => {
-    if (!cartItems.length) {
-      return 'https://wa.me/5571900000000'
-    }
+  const checkoutWhatsAppMessage = useMemo(
+    () => formatCheckoutWhatsAppMessage(checkoutData, cartItems, cartTotal),
+    [cartItems, cartTotal, checkoutData],
+  )
 
-    const lines = cartItems.map(
-      (item) =>
-        `- ${item.name} x${item.quantity} (${toCurrency(
-          parseCurrency(item.price) * item.quantity,
-        )})`,
-    )
-
-    const message = [
-      'Oi! Quero finalizar meu pedido:',
-      '',
-      'Cliente:',
-      `Nome: ${checkoutData.fullName || 'Nao informado'}`,
-      `Telefone: ${checkoutData.phone || 'Nao informado'}`,
-      `Email: ${checkoutData.email || 'Nao informado'}`,
-      '',
-      'Entrega:',
-      `CEP: ${checkoutData.cep || 'Nao informado'}`,
-      `Endereco: ${checkoutData.street || 'Nao informado'}, ${checkoutData.number || 's/n'}`,
-      `Bairro: ${checkoutData.neighborhood || 'Nao informado'}`,
-      `Cidade/UF: ${checkoutData.city || 'Nao informado'} - ${checkoutData.state || '--'}`,
-      '',
-      `Pagamento: ${checkoutData.paymentMethod}`,
-      checkoutData.note ? `Observacoes: ${checkoutData.note}` : '',
-      '',
-      'Itens:',
-      ...lines,
-      '',
-      `Total: ${toCurrency(cartTotal)}`,
-    ]
-      .filter(Boolean)
-      .join('\n')
-
-    return `https://wa.me/5571900000000?text=${encodeURIComponent(message)}`
-  }, [cartItems, cartTotal, checkoutData])
+  const checkoutWhatsAppLink = useMemo(
+    () => (cartItems.length ? buildWhatsAppUrl(checkoutWhatsAppMessage) : buildWhatsAppUrl()),
+    [cartItems.length, checkoutWhatsAppMessage],
+  )
 
   useEffect(() => {
     if (!notification) {
@@ -723,6 +449,14 @@ function App() {
       return
     }
 
+    const orderDraft = createOrderDraft(
+      checkoutData,
+      cartItems,
+      cartTotal,
+      checkoutWhatsAppMessage,
+    )
+
+    void storeRepository.createOrder(orderDraft).catch(() => undefined)
     notify('Redirecionando para o WhatsApp com seu pedido.', 'success')
   }
 
@@ -738,7 +472,18 @@ function App() {
       return
     }
 
-    setNewsletterFeedback('Cadastro confirmado! Cupom PRIMEIRACOMPRA10 enviado.')
+    void storeRepository
+      .subscribeNewsletter({
+        email,
+        source: 'newsletter',
+        couponCode: storeConfig.marketing.firstPurchaseCoupon,
+        createdAt: new Date().toISOString(),
+      })
+      .catch(() => undefined)
+
+    setNewsletterFeedback(
+      `Cadastro confirmado! Cupom ${storeConfig.marketing.firstPurchaseCoupon} enviado.`,
+    )
     setNewsletterEmail('')
     notify('Cadastro realizado com sucesso!', 'success')
   }
@@ -753,7 +498,7 @@ function App() {
     }
 
     return (
-      <div className="grid grid-cols-2 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {items.map((product) => (
           <ProductCard
             key={product.id}
@@ -779,7 +524,7 @@ function App() {
 
             <div className="hidden w-full overflow-hidden sm:block sm:w-auto sm:flex-1 sm:px-4">
               <p className="ticker-track whitespace-nowrap text-center">
-                Entrega para todo Brasil · 3% OFF no Pix · Em ate 12x no cartao · Garantia em todas as pecas
+                Entrega para todo Brasil · {storeConfig.marketing.pixDiscountPercent}% OFF no Pix · Em ate 12x no cartao · Garantia em todas as pecas
               </p>
             </div>
 
@@ -809,7 +554,7 @@ function App() {
             <Truck size={14} /> entrega em todo o Brasil
           </span>
           <span className="inline-flex items-center gap-2">
-            <BadgePercent size={14} /> cupom PRIMEIRACOMPRA10
+            <BadgePercent size={14} /> cupom {storeConfig.marketing.firstPurchaseCoupon}
           </span>
           <span className="inline-flex items-center gap-2">
             <ShieldCheck size={14} /> garantia e cuidado
@@ -1324,7 +1069,7 @@ function App() {
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/5571900000000" target="_blank" rel="noreferrer">
+                <a href={buildWhatsAppUrl()} target="_blank" rel="noreferrer">
                   Fale conosco
                 </a>
               </li>
@@ -1339,10 +1084,10 @@ function App() {
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--ink)]">Atendimento</p>
             <ul className="mt-3 space-y-2">
-              <li>Seg a Sex · 08h as 17h</li>
-              <li>WhatsApp: (71) 90000-0000</li>
-              <li>contato@adryacessorios.com</li>
-              <li>Salvador - BA</li>
+              <li>{storeConfig.contact.hours}</li>
+              <li>WhatsApp: {storeConfig.contact.whatsappDisplay}</li>
+              <li>{storeConfig.contact.email}</li>
+              <li>{storeConfig.contact.city}</li>
             </ul>
           </div>
         </div>

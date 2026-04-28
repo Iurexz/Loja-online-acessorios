@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Adry Acessorios
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Loja online em React, TypeScript, Vite e Tailwind. A vitrine publica continua funcionando com dados locais, mas a estrutura ja esta preparada para trocar catalogo, pedidos, newsletter e cupons por uma API.
 
-Currently, two official plugins are available:
+## Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Configuracao de API
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Sem variavel de ambiente, o app usa dados locais e salva pedidos/newsletter em `localStorage`, util para prototipo e validacao.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Para ligar um backend real, crie `.env.local`:
+
+```bash
+VITE_API_BASE_URL=https://sua-api.com
 ```
+
+Quando essa variavel existe, `src/services/storeRepository.ts` tenta usar a API e cai no modo local se a chamada falhar.
+
+## Estrutura principal
+
+- `src/App.tsx`: interface da loja, carrinho e checkout.
+- `src/data/catalog.ts`: produtos, categorias e avaliacoes iniciais.
+- `src/config/storefront.ts`: WhatsApp, contato, cupom principal e URL da API.
+- `src/services/storeRepository.ts`: contrato de catalogo, pedidos, produtos, newsletter e cupons.
+- `src/services/orderDraft.ts`: montagem do pedido e mensagem de WhatsApp.
+- `src/services/promotions.ts`: validacao de cupons e calculo de desconto.
+- `docs/backend-admin-plan.md`: plano do painel interno para o dono da loja.
+
+## Contrato esperado da API
+
+O frontend ja esta apontado para estes endpoints:
+
+- `GET /storefront`
+- `GET /products`
+- `POST /orders`
+- `POST /newsletter`
+- `POST /coupons/validate`
+- `POST /admin/products`
+- `PATCH /admin/products/:id`
+- `DELETE /admin/products/:id`
+- `GET /admin/orders`
+- `PATCH /admin/orders/:id/status`
+- `GET /admin/coupons`
+- `PUT /admin/coupons/:code`
+
+Os endpoints `/admin/*` devem exigir login do dono/administrador.
