@@ -52,9 +52,6 @@ function ProductCard({
         <p className="absolute left-2 top-2 rounded-full bg-white/85 px-2 py-1 text-[0.56rem] font-bold uppercase leading-none tracking-[0.08em] text-[var(--brand-deep)] sm:left-3 sm:top-3 sm:px-2.5 sm:text-[0.63rem] sm:tracking-[0.1em]">
           {product.badge}
         </p>
-        <p className="absolute right-2 top-2 flex min-h-7 max-w-[6.2rem] items-center justify-center rounded-full bg-[var(--ink)] px-2.5 py-1 text-center text-[0.52rem] font-bold uppercase leading-tight tracking-[0.06em] text-white sm:right-3 sm:top-3 sm:max-w-[8rem] sm:text-[0.63rem] sm:tracking-[0.1em]">
-          {product.category}
-        </p>
 
         <button
           type="button"
@@ -73,6 +70,12 @@ function ProductCard({
       <h3 className="text-[0.82rem] font-normal leading-snug text-[var(--ink)] sm:text-base">
         {product.name}
       </h3>
+
+      <div className="mt-2 flex">
+        <span className="inline-flex max-w-full items-center rounded-full bg-[var(--brand-soft)] px-2.5 py-1 font-heading text-[0.58rem] font-bold uppercase leading-none tracking-[0.06em] text-[var(--brand-deep)] ring-1 ring-[var(--line)] sm:text-[0.65rem] sm:tracking-[0.08em]">
+          {product.category}
+        </span>
+      </div>
 
       <div className="mt-2 flex items-end gap-1.5 sm:mt-3 sm:gap-2">
         {product.oldPrice ? (
