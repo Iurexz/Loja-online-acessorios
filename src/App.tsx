@@ -45,9 +45,9 @@ function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <article className="glass hover-lift animate-rise rounded-3xl p-2.5 sm:p-5">
+    <article className="glass hover-lift animate-rise rounded-3xl p-2 sm:p-5">
       <div
-        className="relative mb-2.5 aspect-[4/5] overflow-hidden rounded-2xl border border-black/5 bg-white p-2 sm:mb-5 sm:aspect-[4/5] sm:p-4"
+        className="relative mb-2 aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 bg-white p-1.5 sm:mb-5 sm:aspect-[4/5] sm:p-4"
       >
         <p className="absolute left-2 top-2 rounded-full bg-white/85 px-2 py-1 text-[0.56rem] font-bold uppercase leading-none tracking-[0.08em] text-[var(--brand-deep)] sm:left-3 sm:top-3 sm:px-2.5 sm:text-[0.63rem] sm:tracking-[0.1em]">
           {product.badge}
@@ -71,27 +71,27 @@ function ProductCard({
         {product.name}
       </h3>
 
-      <div className="mt-2 flex items-end gap-1.5 sm:mt-3 sm:gap-2">
+      <div className="mt-1.5 flex items-end gap-1.5 sm:mt-3 sm:gap-2">
         {product.oldPrice ? (
-          <span className="text-[0.68rem] text-[var(--muted)] line-through sm:text-sm">
+          <span className="text-[0.64rem] text-[var(--muted)] line-through sm:text-sm">
             {product.oldPrice}
           </span>
         ) : null}
-        <span className="font-heading text-[1.18rem] font-bold leading-none text-[var(--ink)] sm:text-2xl">
+        <span className="font-heading text-[1.05rem] font-bold leading-none text-[var(--ink)] sm:text-2xl">
           {product.price}
         </span>
       </div>
 
-      <div className="mt-2 space-y-0.5 text-left font-heading leading-tight">
-        <p className="text-[0.62rem] text-[var(--muted)] sm:text-xs">{product.installment}</p>
-        <p className="text-[0.64rem] font-bold text-[var(--brand-deep)] sm:text-xs">{product.pix}</p>
+      <div className="mt-1.5 space-y-0.5 text-left font-heading leading-tight sm:mt-2">
+        <p className="text-[0.6rem] text-[var(--muted)] sm:text-xs">{product.installment}</p>
+        <p className="text-[0.62rem] font-bold text-[var(--brand-deep)] sm:text-xs">{product.pix}</p>
       </div>
 
-      <div className="mt-3 grid gap-2 sm:mt-5 sm:grid-cols-2">
+      <div className="mt-2.5 grid gap-1.5 sm:mt-5 sm:grid-cols-2 sm:gap-2">
         <button
           type="button"
           onClick={() => onAddToCart(product)}
-          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2.5 py-2 text-[0.62rem] font-bold uppercase tracking-[0.04em] text-white transition hover:brightness-95 sm:gap-2 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.04em] text-white transition hover:brightness-95 sm:gap-2 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.08em]"
         >
           ADICIONAR <ShoppingBag size={12} />
         </button>
@@ -99,7 +99,7 @@ function ProductCard({
           href={productWhatsAppLink(product)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2.5 py-2 text-[0.62rem] font-bold uppercase tracking-[0.04em] !text-white transition hover:brightness-95 hover:!text-white sm:gap-2 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.04em] !text-white transition hover:brightness-95 hover:!text-white sm:gap-2 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.08em]"
         >
           COMPRAR <ExternalLink size={12} />
         </a>
