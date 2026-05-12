@@ -82,9 +82,8 @@ function ProductCard({
         </span>
       </div>
 
-      <div className="mt-1.5 space-y-0.5 text-left font-heading leading-tight sm:mt-2">
+      <div className="mt-1.5 text-left font-heading leading-tight sm:mt-2">
         <p className="text-[0.6rem] text-[var(--muted)] sm:text-xs">{product.installment}</p>
-        <p className="text-[0.62rem] font-bold text-[var(--brand-deep)] sm:text-xs">{product.pix}</p>
       </div>
 
       <div className="mt-2.5 grid gap-1.5 sm:mt-5 sm:grid-cols-2 sm:gap-2">
@@ -517,29 +516,11 @@ function App() {
             <span className="hidden rounded-full bg-white/12 px-3 py-1 sm:inline-flex">
               Frete fixo RJ 10,90 | SP 19,90
             </span>
-            <span className="sm:hidden">Frete RJ/SP + Pix 3% off</span>
 
-            <div className="hidden w-full overflow-hidden sm:block sm:w-auto sm:flex-1 sm:px-4">
+            <div className="w-full overflow-hidden sm:w-auto sm:flex-1 sm:px-4">
               <p className="ticker-track whitespace-nowrap text-center">
-                Entrega para todo Brasil · {storeConfig.marketing.pixDiscountPercent}% OFF no Pix · Em ate 12x no cartao · Garantia em todas as pecas
+                Entrega para todo Brasil · Em ate 12x no cartao · Garantia em todas as pecas · Entrega para todo Brasil · Em ate 12x no cartao · Garantia em todas as pecas
               </p>
-            </div>
-
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <button
-                type="button"
-                onClick={() => scrollToSection('#checkout')}
-                className="rounded-full bg-white/10 px-2.5 py-0.5 text-[0.62rem] normal-case tracking-[0.02em] transition hover:bg-white/20 sm:px-3 sm:py-1 sm:text-xs sm:uppercase sm:tracking-[0.08em]"
-              >
-                Rastrear pedido
-              </button>
-              <button
-                type="button"
-                onClick={handleOpenCart}
-                className="rounded-full bg-white/15 px-2.5 py-0.5 text-[0.62rem] normal-case tracking-[0.02em] transition hover:bg-white/20 sm:px-3 sm:py-1 sm:text-xs sm:uppercase sm:tracking-[0.08em]"
-              >
-                Abrir carrinho
-              </button>
             </div>
           </div>
         </div>
@@ -705,7 +686,7 @@ function App() {
                 Formas de pagamento
               </p>
               <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
-                Em ate 12x no cartao e 3% OFF no Pix no atendimento.
+                Em ate 12x no cartao e atendimento rapido.
               </p>
             </article>
 
@@ -924,7 +905,7 @@ function App() {
               <aside className="glass rounded-3xl p-5 sm:p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">Resumo</p>
                 <p className="mt-2 font-heading text-4xl leading-none text-[var(--ink)]">{toCurrency(cartTotal)}</p>
-                <p className="mt-2 text-xs text-[var(--muted)]">Pix ou cartao em ate 12x</p>
+                <p className="mt-2 text-xs text-[var(--muted)]">Cartao em ate 12x</p>
 
                 <button
                   type="button"
@@ -1242,7 +1223,6 @@ function App() {
                     <span>Frete</span>
                     <span>Calculado no atendimento</span>
                   </div>
-                  <p className="mt-1 text-xs text-[var(--muted)]">Pix com 3% OFF no atendimento.</p>
                 </div>
 
                 <div className="mt-4 flex items-center gap-2">
