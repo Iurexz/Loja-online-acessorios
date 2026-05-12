@@ -45,9 +45,9 @@ function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <article className="glass hover-lift animate-rise rounded-3xl p-3 sm:p-5">
+    <article className="glass hover-lift animate-rise rounded-3xl p-2.5 sm:p-5">
       <div
-        className="relative mb-3 aspect-square overflow-hidden rounded-2xl border border-black/5 bg-white p-2.5 sm:mb-5 sm:aspect-[4/5] sm:p-4"
+        className="relative mb-2.5 aspect-[4/5] overflow-hidden rounded-2xl border border-black/5 bg-white p-2 sm:mb-5 sm:aspect-[4/5] sm:p-4"
       >
         <p className="absolute left-2 top-2 rounded-full bg-white/85 px-2 py-1 text-[0.56rem] font-bold uppercase leading-none tracking-[0.08em] text-[var(--brand-deep)] sm:left-3 sm:top-3 sm:px-2.5 sm:text-[0.63rem] sm:tracking-[0.1em]">
           {product.badge}
@@ -70,12 +70,6 @@ function ProductCard({
       <h3 className="text-[0.82rem] font-normal leading-snug text-[var(--ink)] sm:text-base">
         {product.name}
       </h3>
-
-      <div className="mt-2 flex">
-        <span className="inline-flex max-w-full items-center rounded-full bg-[var(--brand-soft)] px-2.5 py-1 font-heading text-[0.58rem] font-bold uppercase leading-none tracking-[0.06em] text-[var(--brand-deep)] ring-1 ring-[var(--line)] sm:text-[0.65rem] sm:tracking-[0.08em]">
-          {product.category}
-        </span>
-      </div>
 
       <div className="mt-2 flex items-end gap-1.5 sm:mt-3 sm:gap-2">
         {product.oldPrice ? (
