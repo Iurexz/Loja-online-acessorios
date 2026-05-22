@@ -666,15 +666,15 @@ function App() {
         </div>
 
         <div className="border-t border-[var(--line)] lg:hidden bg-[var(--surface-soft)]">
-          <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto px-4 py-3">
-            <div className="flex min-w-max items-center space-x-1">
+          <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto px-4 py-0">
+            <div className="flex min-w-max items-center space-x-2">
               <button
                 type="button"
                 onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-                className={`px-4 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition rounded-full ${
+                className={`px-3 py-3 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
                   activeCategory === ALL_CATEGORIES
-                    ? 'bg-[var(--brand-soft)] text-[var(--brand-deep)]'
-                    : 'bg-transparent text-[var(--muted)]'
+                    ? 'border-[var(--brand-deep)] text-[var(--ink)]'
+                    : 'border-transparent text-[var(--muted)]'
                 }`}
               >
                 TODAS
@@ -685,10 +685,10 @@ function App() {
                   key={`mobile-header-${category.chip}`}
                   type="button"
                   onClick={() => handleCategoryRedirect(category.name)}
-                  className={`px-4 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition rounded-full ${
+                  className={`px-3 py-3 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
                     activeCategory === category.name
-                      ? 'bg-[var(--brand-soft)] text-[var(--brand-deep)]'
-                      : 'bg-transparent text-[var(--muted)]'
+                      ? 'border-[var(--brand-deep)] text-[var(--ink)]'
+                      : 'border-transparent text-[var(--muted)]'
                   }`}
                 >
                   {category.chip}
