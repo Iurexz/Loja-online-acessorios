@@ -559,13 +559,13 @@ function App() {
     <div id="top" className="min-h-screen">
       <div className="bg-[var(--brand-deep)] text-white">
         <div className="mx-auto max-w-7xl px-4 py-1.5 sm:py-2 lg:px-8">
-          <div className="flex items-center justify-between gap-2 text-[0.55rem] font-medium uppercase tracking-[0.1em] sm:flex-wrap sm:gap-3 sm:text-[0.65rem] sm:tracking-[0.15em] opacity-90">
-            <span className="hidden sm:inline-flex opacity-80">
+          <div className="flex items-center justify-between gap-2 text-[0.55rem] font-bold uppercase tracking-[0.1em] sm:flex-wrap sm:gap-3 sm:text-[0.65rem] sm:tracking-[0.15em]">
+            <span className="hidden sm:inline-flex">
               FRETE FIXO RJ 10,90 | SP 19,90
             </span>
 
             <div className="w-full overflow-hidden sm:w-auto sm:flex-1 sm:px-4">
-              <p className="ticker-track whitespace-nowrap text-center opacity-80">
+              <p className="ticker-track whitespace-nowrap text-center">
                 COMPRE ONLINE E RECEBA ONDE QUISER · PARCELE SUAS COMPRAS EM ATÉ 12X · GARANTIA EXCLUSIVA EM TODAS AS PEÇAS
               </p>
             </div>
@@ -574,7 +574,7 @@ function App() {
       </div>
 
       <div className="border-b border-[var(--line)] bg-[var(--surface-soft)]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 py-3 text-[0.6rem] font-medium uppercase tracking-[0.12em] text-[var(--muted)] sm:gap-x-10 sm:gap-y-2 sm:py-3.5 sm:text-[0.65rem] sm:tracking-[0.15em] lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 py-3 text-[0.6rem] font-bold uppercase tracking-[0.12em] text-[var(--marketing-text)] sm:gap-x-10 sm:gap-y-2 sm:py-3.5 sm:text-[0.65rem] sm:tracking-[0.15em] lg:px-8">
           <span className="inline-flex items-center gap-2">
             <Truck size={14} strokeWidth={1.5} /> ENTREGA EM TODO O BRASIL
           </span>
@@ -606,11 +606,7 @@ function App() {
             <button
               type="button"
               onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-              className={`px-4 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
-                activeCategory === ALL_CATEGORIES
-                  ? 'border-[var(--brand-deep)] text-[var(--ink)]'
-                  : 'border-transparent text-[var(--muted)] hover:text-[var(--brand-deep)]'
-              }`}
+              className={`px-4 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.1em] transition border-b-2 ${activeCategory === ALL_CATEGORIES ? 'border-[var(--brand-deep)] text-[var(--ink)]' : 'border-transparent text-[var(--nav-text)] hover:text-[var(--ink)]'}`}
             >
               TODAS
             </button>
@@ -620,11 +616,7 @@ function App() {
                 key={`header-${category.chip}`}
                 type="button"
                 onClick={() => handleCategoryRedirect(category.name)}
-                className={`px-4 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
-                  activeCategory === category.name
-                    ? 'border-[var(--brand-deep)] text-[var(--ink)]'
-                    : 'border-transparent text-[var(--muted)] hover:text-[var(--brand-deep)]'
-                }`}
+                className={`px-4 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.1em] transition border-b-2 ${activeCategory === category.name ? 'border-[var(--brand-deep)] text-[var(--ink)]' : 'border-transparent text-[var(--nav-text)] hover:text-[var(--ink)]'}`}
               >
                 {category.chip}
               </button>
@@ -671,11 +663,7 @@ function App() {
               <button
                 type="button"
                 onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-                className={`px-3 py-3 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
-                  activeCategory === ALL_CATEGORIES
-                    ? 'border-[var(--brand-deep)] text-[var(--ink)]'
-                    : 'border-transparent text-[var(--muted)]'
-                }`}
+                className={`px-3 py-3 text-[0.65rem] font-bold uppercase tracking-[0.1em] transition border-b-2 ${activeCategory === ALL_CATEGORIES ? 'border-[var(--brand-deep)] text-[var(--ink)]' : 'border-transparent text-[var(--nav-text)]'}`}
               >
                 TODAS
               </button>
@@ -685,11 +673,7 @@ function App() {
                   key={`mobile-header-${category.chip}`}
                   type="button"
                   onClick={() => handleCategoryRedirect(category.name)}
-                  className={`px-3 py-3 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
-                    activeCategory === category.name
-                      ? 'border-[var(--brand-deep)] text-[var(--ink)]'
-                      : 'border-transparent text-[var(--muted)]'
-                  }`}
+                  className={`px-3 py-3 text-[0.65rem] font-bold uppercase tracking-[0.1em] transition border-b-2 ${activeCategory === category.name ? 'border-[var(--brand-deep)] text-[var(--ink)]' : 'border-transparent text-[var(--nav-text)]'}`}
                 >
                   {category.chip}
                 </button>
@@ -1447,3 +1431,4 @@ function App() {
 }
 
 export default App
+
