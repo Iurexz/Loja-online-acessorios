@@ -45,63 +45,83 @@ function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <article className="glass hover-lift animate-rise rounded-3xl p-2 sm:p-5">
-      <div
-        className="relative mb-2 aspect-[4/3] overflow-hidden rounded-2xl border border-black/5 bg-white p-1.5 sm:mb-5 sm:aspect-[4/5] sm:p-4"
-      >
-        <p className="absolute left-2 top-2 rounded-full bg-white/85 px-2 py-1 text-[0.56rem] font-bold uppercase leading-none tracking-[0.08em] text-[var(--brand-deep)] sm:left-3 sm:top-3 sm:px-2.5 sm:text-[0.63rem] sm:tracking-[0.1em]">
-          {product.badge}
-        </p>
+    <article className="flex flex-col bg-white overflow-hidden pb-3 border-none rounded-none shadow-sm h-full w-full">
+      <div className="relative aspect-[4/3] mb-2 bg-gray-100 sm:aspect-square w-full">
+        {/* Arrow Left */}
+        <button className="absolute -left-2.5 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-sm z-10">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        {/* Arrow Right */}
+        <button className="absolute -right-2.5 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-sm z-10">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        {product.badge && (
+          <p className="absolute right-2 top-2 rounded-sm bg-black/50 px-1 py-0.5 text-[0.5rem] font-bold uppercase text-white shadow-sm z-10">
+            {product.badge}
+          </p>
+        )}
 
         <button
           type="button"
           onClick={() => onToggleFavorite(product)}
-          className={`absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full transition sm:h-9 sm:w-9 ${
-            isFavorite
-              ? 'bg-[var(--brand-deep)] text-white'
-              : 'bg-white/85 text-[var(--brand-deep)]'
+          className={`absolute top-2 left-2 p-0.5 transition z-10 drop-shadow-sm ${
+            isFavorite ? 'text-black' : 'text-black hover:text-pink-400'
           }`}
           aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
         >
-          <Heart size={16} />
+          <Heart size={18} className={isFavorite ? 'fill-black' : ''} />
         </button>
       </div>
 
-      <h3 className="text-[0.82rem] font-normal leading-snug text-[var(--ink)] sm:text-base">
-        {product.name}
-      </h3>
+      <div className="flex-1 flex flex-col items-center px-1 text-center">
+        <h3 className="text-[0.65rem] font-medium leading-[1.2] text-gray-700 uppercase mb-1 h-[2.4em] overflow-hidden w-full px-1">
+          {product.name}
+        </h3>
 
-      <div className="mt-1.5 flex items-end gap-1.5 sm:mt-3 sm:gap-2">
-        {product.oldPrice ? (
-          <span className="text-[0.64rem] text-[var(--muted)] line-through sm:text-sm">
-            {product.oldPrice}
+        {/* Stars */}
+        <div className="flex gap-[1px] text-[#FCD34D] mb-1.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i} size={11} className="fill-current" />
+          ))}
+        </div>
+
+        <div className="mt-auto flex flex-col items-center w-full">
+          <span className="text-[0.95rem] font-bold text-gray-800 mb-0.5">
+            {product.price}
           </span>
-        ) : null}
-        <span className="font-heading text-[1.05rem] font-bold leading-none text-[var(--ink)] sm:text-2xl">
-          {product.price}
-        </span>
+
+          <p className="text-[0.55rem] text-gray-500">
+            {product.installment}
+          </p>
+
+          <p className="text-[0.55rem] text-gray-500 mb-2">
+            {product.pix} no boleto ou pix
+          </p>
+        </div>
+
+        {/* Dummy Variants pills just for showcase as in screenshot */}
+        {(product.id === '1' || product.name.toUpperCase().includes('PULSEIRA')) ? (
+          <div className="flex flex-wrap items-center justify-center gap-1 mb-2 px-1">
+            {['VERDE', 'CRISTAL', 'LILÁS', 'AZUL', 'AMARELO'].map(v => (
+              <span key={v} className="text-[0.45rem] font-medium border border-gray-400 rounded-full px-1.5 py-0.5 text-gray-600 tracking-wide uppercase">
+                {v}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <div className="mb-2" />
+        )}
       </div>
 
-      <div className="mt-1.5 text-left font-heading leading-tight sm:mt-2">
-        <p className="text-[0.6rem] text-[var(--muted)] sm:text-xs">{product.installment}</p>
-      </div>
-
-      <div className="mt-2.5 grid gap-1.5 sm:mt-5 sm:grid-cols-2 sm:gap-2">
+      <div className="px-2 mt-2 w-full">
         <button
           type="button"
           onClick={() => onAddToCart(product)}
-          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.04em] text-white transition hover:brightness-95 sm:gap-2 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.08em]"
+          className="w-full bg-[#FFB6C1] text-white text-[0.65rem] font-bold uppercase tracking-wider py-1.5 rounded-sm transition hover:brightness-95 flex items-center justify-center"
         >
-          ADICIONAR <ShoppingBag size={12} />
+          ADICIONAR AO CARRINHO
         </button>
-        <a
-          href={productWhatsAppLink(product)}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.04em] !text-white transition hover:brightness-95 hover:!text-white sm:gap-2 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.08em]"
-        >
-          COMPRAR <ExternalLink size={12} />
-        </a>
       </div>
     </article>
   )
