@@ -574,15 +574,15 @@ function App() {
       </div>
 
       <div className="border-b border-[var(--line)] bg-[var(--surface-soft)]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 py-3 text-[0.6rem] font-medium uppercase tracking-[0.12em] text-[var(--muted)] sm:gap-x-10 sm:gap-y-2 sm:py-3.5 sm:text-[0.65rem] sm:tracking-[0.15em] lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 py-3 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[#D96B8A] sm:gap-x-10 sm:gap-y-2 sm:py-3.5 sm:text-[0.7rem] sm:tracking-[0.15em] lg:px-8">
           <span className="inline-flex items-center gap-2">
-            <Truck size={14} strokeWidth={1.5} /> ENTREGA EM TODO O BRASIL
+            <Truck size={15} strokeWidth={2} /> ENTREGA EM TODO O BRASIL
           </span>
           <span className="inline-flex items-center gap-2">
-            <BadgePercent size={14} strokeWidth={1.5} /> CUPOM {storeConfig.marketing.firstPurchaseCoupon}
+            <BadgePercent size={15} strokeWidth={2} /> CUPOM {storeConfig.marketing.firstPurchaseCoupon}
           </span>
           <span className="inline-flex items-center gap-2">
-            <ShieldCheck size={14} strokeWidth={1.5} /> GARANTIA E CUIDADO
+            <ShieldCheck size={15} strokeWidth={2} /> GARANTIA E CUIDADO
           </span>
         </div>
       </div>
@@ -606,10 +606,10 @@ function App() {
             <button
               type="button"
               onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-              className={`px-4 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
+              className={`px-4 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.1em] transition border-b-2 ${
                 activeCategory === ALL_CATEGORIES
                   ? 'border-[var(--brand-deep)] text-[var(--ink)]'
-                  : 'border-transparent text-[var(--muted)] hover:text-[var(--brand-deep)]'
+                  : 'border-transparent text-[#D96B8A] hover:text-[var(--ink)]'
               }`}
             >
               TODAS
@@ -620,10 +620,10 @@ function App() {
                 key={`header-${category.chip}`}
                 type="button"
                 onClick={() => handleCategoryRedirect(category.name)}
-                className={`px-4 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
+                className={`px-4 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.1em] transition border-b-2 ${
                   activeCategory === category.name
                     ? 'border-[var(--brand-deep)] text-[var(--ink)]'
-                    : 'border-transparent text-[var(--muted)] hover:text-[var(--brand-deep)]'
+                    : 'border-transparent text-[#D96B8A] hover:text-[var(--ink)]'
                 }`}
               >
                 {category.chip}
