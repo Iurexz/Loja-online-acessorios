@@ -40,17 +40,60 @@ function ProductCard({
   onToggleFavorite,
   onAddToCart,
 }: ProductCardProps) {
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const totalSlides = 3
+
+  useEffect(() => {
+    if (isPaused) return
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % totalSlides)
+    }, 2500)
+    return () => clearInterval(timer)
+  }, [isPaused, totalSlides])
+
+  // Simulando variações vindas por categoria (mock do futuro backend)
+  const mockVariants = useMemo(() => {
+    const term = `${product.category} ${product.name}`.toLowerCase()
+    if (term.includes('pulseira')) return ['VERDE', 'CRISTAL', 'LILÁS', 'AZUL']
+    if (term.includes('colar') || term.includes('choker') || term.includes('riviera')) return ['40cm', '45cm']
+    if (term.includes('anel') || term.includes('argola')) return ['Pequena', 'Média', 'Grande']
+    return ['Padrão']
+  }, [product.category, product.name])
+
   return (
     <article className="flex flex-col bg-white overflow-visible pb-4 border border-gray-100 shadow-sm h-full w-full">
-      <div className="relative aspect-[3/4] mb-3 bg-gray-100 sm:aspect-[4/5] w-full">
-        {/* Arrow Left */}
-        <button className="absolute -left-3 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-md z-10">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        {/* Arrow Right */}
-        <button className="absolute -right-3 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-md z-10">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
+      <div 
+        className="relative aspect-[3/4] mb-3 bg-gray-100 sm:aspect-[4/5] w-full cursor-pointer overflow-hidden"
+        onClick={() => setIsPaused(!isPaused)}
+        title={isPaused ? "Retomar carrossel" : "Pausar carrossel"}
+      >
+        {/* Placeholder para as imagens do carrossel */}
+        <div 
+          className="w-full h-full flex transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+        >
+          {Array.from({ length: totalSlides }).map((_, idx) => (
+            <div 
+              key={idx} 
+              className={`min-w-full h-full flex items-center justify-center text-gray-300 text-xs ${idx % 2 !== 0 ? 'bg-gray-50' : 'bg-gray-100'}`}
+            >
+              Foto {idx + 1}
+            </div>
+          ))}
+        </div>
+
+        {/* Indicadores do carrossel (pontinhos) */}
+        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
+          {Array.from({ length: totalSlides }).map((_, idx) => (
+            <div 
+              key={idx} 
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeSlide === idx ? 'w-4 bg-[#FFB6C1]' : 'w-1.5 bg-gray-300/80'
+              }`}
+            />
+          ))}
+        </div>
 
         {product.badge && (
           <p className="absolute right-2 top-2 rounded-sm bg-gray-500 px-1.5 py-0.5 text-[0.55rem] font-bold uppercase text-white shadow-sm z-10 tracking-wide">
@@ -60,7 +103,10 @@ function ProductCard({
 
         <button
           type="button"
-          onClick={() => onToggleFavorite(product)}
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggleFavorite(product)
+          }}
           className={`absolute top-2 left-2 p-0.5 transition z-10 drop-shadow-sm ${
             isFavorite ? 'text-black' : 'text-black hover:text-pink-400'
           }`}
@@ -96,17 +142,17 @@ function ProductCard({
           </p>
         </div>
 
-        {/* Dummy Variants pills just for showcase as in screenshot */}
-        {(product.id === '1' || product.name.toUpperCase().includes('PULSEIRA')) ? (
-          <div className="flex flex-wrap items-center justify-center gap-1 mb-3 px-1">
-            {['VERDE', 'CRISTAL', 'LILÁS', 'AZUL', 'AMARELO'].map(v => (
+        {/* Variantes vinculadas dinamicamente à categoria/nome */}
+        {mockVariants.length > 0 ? (
+          <div className="flex flex-wrap items-center justify-center gap-1 mb-3 px-1 h-[2.5em] overflow-hidden">
+            {mockVariants.map(v => (
               <span key={v} className="text-[0.5rem] font-medium border border-gray-400 rounded-full px-2 py-0.5 text-gray-600 tracking-wider uppercase">
                 {v}
               </span>
             ))}
           </div>
         ) : (
-          <div className="mb-3" />
+          <div className="mb-3 h-[2.5em]" />
         )}
       </div>
 
