@@ -41,19 +41,19 @@ function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   return (
-    <article className="flex flex-col bg-white overflow-hidden pb-3 border-none rounded-none shadow-sm h-full w-full">
-      <div className="relative aspect-[4/3] mb-2 bg-gray-100 sm:aspect-square w-full">
+    <article className="flex flex-col bg-white overflow-visible pb-4 border border-gray-100 shadow-sm h-full w-full">
+      <div className="relative aspect-[3/4] mb-3 bg-gray-100 sm:aspect-[4/5] w-full">
         {/* Arrow Left */}
-        <button className="absolute -left-2.5 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-sm z-10">
+        <button className="absolute -left-3 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-md z-10">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         {/* Arrow Right */}
-        <button className="absolute -right-2.5 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-sm z-10">
+        <button className="absolute -right-3 top-1/2 -translate-y-1/2 bg-[#FFB6C1] rounded-full w-7 h-7 flex items-center justify-center text-white shadow-md z-10">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M9 18l6-6-6-6"/></svg>
         </button>
 
         {product.badge && (
-          <p className="absolute right-2 top-2 rounded-sm bg-black/50 px-1 py-0.5 text-[0.5rem] font-bold uppercase text-white shadow-sm z-10">
+          <p className="absolute right-2 top-2 rounded-sm bg-gray-500 px-1.5 py-0.5 text-[0.55rem] font-bold uppercase text-white shadow-sm z-10 tracking-wide">
             {product.badge}
           </p>
         )}
@@ -66,55 +66,55 @@ function ProductCard({
           }`}
           aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
         >
-          <Heart size={18} className={isFavorite ? 'fill-black' : ''} />
+          <Heart size={20} className={isFavorite ? 'fill-black' : ''} />
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center px-1 text-center">
-        <h3 className="text-[0.65rem] font-medium leading-[1.2] text-gray-700 uppercase mb-1 h-[2.4em] overflow-hidden w-full px-1">
+      <div className="flex-1 flex flex-col items-center px-2 text-center">
+        <h3 className="text-[0.75rem] font-medium leading-[1.3] text-gray-800 uppercase mb-2 h-[2.6em] overflow-hidden w-full px-1">
           {product.name}
         </h3>
 
         {/* Stars */}
-        <div className="flex gap-[1px] text-[#FCD34D] mb-1.5">
+        <div className="flex gap-[2px] text-[#FCD34D] mb-2.5">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} size={11} className="fill-current" />
+            <Star key={i} size={13} className="fill-current" />
           ))}
         </div>
 
         <div className="mt-auto flex flex-col items-center w-full">
-          <span className="text-[0.95rem] font-bold text-gray-800 mb-0.5">
+          <span className="text-[1.1rem] font-bold text-gray-900 mb-1">
             {product.price}
           </span>
 
-          <p className="text-[0.55rem] text-gray-500">
+          <p className="text-[0.65rem] text-gray-500">
             {product.installment}
           </p>
 
-          <p className="text-[0.55rem] text-gray-500 mb-2">
+          <p className="text-[0.65rem] text-gray-500 mb-3">
             {product.pix} no boleto ou pix
           </p>
         </div>
 
         {/* Dummy Variants pills just for showcase as in screenshot */}
         {(product.id === '1' || product.name.toUpperCase().includes('PULSEIRA')) ? (
-          <div className="flex flex-wrap items-center justify-center gap-1 mb-2 px-1">
+          <div className="flex flex-wrap items-center justify-center gap-1 mb-3 px-1">
             {['VERDE', 'CRISTAL', 'LILÁS', 'AZUL', 'AMARELO'].map(v => (
-              <span key={v} className="text-[0.45rem] font-medium border border-gray-400 rounded-full px-1.5 py-0.5 text-gray-600 tracking-wide uppercase">
+              <span key={v} className="text-[0.5rem] font-medium border border-gray-400 rounded-full px-2 py-0.5 text-gray-600 tracking-wider uppercase">
                 {v}
               </span>
             ))}
           </div>
         ) : (
-          <div className="mb-2" />
+          <div className="mb-3" />
         )}
       </div>
 
-      <div className="px-2 mt-2 w-full">
+      <div className="px-3 mt-1 w-full">
         <button
           type="button"
           onClick={() => onAddToCart(product)}
-          className="w-full bg-[#FFB6C1] text-white text-[0.65rem] font-bold uppercase tracking-wider py-1.5 rounded-sm transition hover:brightness-95 flex items-center justify-center"
+          className="w-full bg-[#FFB6C1] text-white text-[0.7rem] font-bold uppercase tracking-wider py-2 rounded-sm transition hover:brightness-95 flex items-center justify-center"
         >
           ADICIONAR AO CARRINHO
         </button>
