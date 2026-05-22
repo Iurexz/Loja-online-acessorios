@@ -574,14 +574,14 @@ function App() {
     <div id="top" className="min-h-screen">
       <div className="bg-[var(--brand-deep)] text-white">
         <div className="mx-auto max-w-7xl px-4 py-1.5 sm:py-2 lg:px-8">
-          <div className="flex items-center justify-between gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.09em] sm:flex-wrap sm:gap-3 sm:text-xs sm:tracking-[0.11em]">
-            <span className="hidden rounded-full bg-white/12 px-3 py-1 sm:inline-flex">
-              Frete fixo RJ 10,90 | SP 19,90
+          <div className="flex items-center justify-between gap-2 text-[0.55rem] font-medium uppercase tracking-[0.1em] sm:flex-wrap sm:gap-3 sm:text-[0.65rem] sm:tracking-[0.15em] opacity-90">
+            <span className="hidden sm:inline-flex opacity-80">
+              FRETE FIXO RJ 10,90 | SP 19,90
             </span>
 
             <div className="w-full overflow-hidden sm:w-auto sm:flex-1 sm:px-4">
-              <p className="ticker-track whitespace-nowrap text-center">
-                Entrega para todo Brasil · Em ate 12x no cartao · Garantia em todas as pecas · Entrega para todo Brasil · Em ate 12x no cartao · Garantia em todas as pecas
+              <p className="ticker-track whitespace-nowrap text-center opacity-80">
+                COMPRE ONLINE E RECEBA ONDE QUISER · PARCELE SUAS COMPRAS EM ATÉ 12X · GARANTIA EXCLUSIVA EM TODAS AS PEÇAS
               </p>
             </div>
           </div>
@@ -589,45 +589,45 @@ function App() {
       </div>
 
       <div className="border-b border-[var(--line)] bg-[var(--surface-soft)]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-4 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.09em] text-[var(--muted)] sm:gap-x-5 sm:gap-y-2 sm:py-3 sm:text-xs sm:tracking-[0.11em] lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 py-3 text-[0.6rem] font-medium uppercase tracking-[0.12em] text-[var(--muted)] sm:gap-x-10 sm:gap-y-2 sm:py-3.5 sm:text-[0.65rem] sm:tracking-[0.15em] lg:px-8">
           <span className="inline-flex items-center gap-2">
-            <Truck size={14} /> entrega em todo o Brasil
+            <Truck size={14} strokeWidth={1.5} /> ENTREGA EM TODO O BRASIL
           </span>
           <span className="inline-flex items-center gap-2">
-            <BadgePercent size={14} /> cupom {storeConfig.marketing.firstPurchaseCoupon}
+            <BadgePercent size={14} strokeWidth={1.5} /> CUPOM {storeConfig.marketing.firstPurchaseCoupon}
           </span>
           <span className="inline-flex items-center gap-2">
-            <ShieldCheck size={14} /> garantia e cuidado
+            <ShieldCheck size={14} strokeWidth={1.5} /> GARANTIA E CUIDADO
           </span>
         </div>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgba(255,253,251,0.98)] backdrop-blur-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-8">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 lg:px-8">
           <div className="flex items-center gap-3">
             <a
               href="#top"
               onClick={(event) => handleNavRedirect(event, '#top')}
-              className="leading-none"
+              className="leading-none flex flex-col items-center justify-center"
             >
-              <p className="font-heading text-4xl text-[var(--ink)]">Adry</p>
-              <p className="text-[0.63rem] font-bold uppercase tracking-[0.23em] text-[var(--muted)]">
-                Acessorios
+              <p className="font-heading text-4xl text-[var(--brand-deep)] font-semibold tracking-normal">Adry</p>
+              <p className="text-[0.6rem] font-medium uppercase tracking-[0.3em] text-[var(--muted)] mt-1">
+                Acessórios
               </p>
             </a>
           </div>
 
-          <nav className="hidden items-center gap-2 lg:flex">
+          <nav className="hidden lg:flex items-center space-x-1">
             <button
               type="button"
               onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-              className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+              className={`px-4 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
                 activeCategory === ALL_CATEGORIES
-                  ? 'bg-[var(--brand-deep)] text-white'
-                  : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                  ? 'border-[var(--brand-deep)] text-[var(--ink)]'
+                  : 'border-transparent text-[var(--muted)] hover:text-[var(--brand-deep)]'
               }`}
             >
-              {ALL_CATEGORIES}
+              TODAS
             </button>
 
             {categories.map((category) => (
@@ -635,10 +635,10 @@ function App() {
                 key={`header-${category.chip}`}
                 type="button"
                 onClick={() => handleCategoryRedirect(category.name)}
-                className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                className={`px-4 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] transition border-b-2 ${
                   activeCategory === category.name
-                    ? 'bg-[var(--brand-deep)] text-white'
-                    : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                    ? 'border-[var(--brand-deep)] text-[var(--ink)]'
+                    : 'border-transparent text-[var(--muted)] hover:text-[var(--brand-deep)]'
                 }`}
               >
                 {category.chip}
@@ -646,36 +646,19 @@ function App() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <form
-              onSubmit={handleSearchSubmit}
-              className="hidden items-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm text-[var(--muted)] md:flex"
-            >
-              <Search size={16} />
-              <input
-                type="text"
-                placeholder="Buscar produto"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="w-40 bg-transparent text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-[var(--brand-soft)] px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[var(--brand-deep)]"
-              >
-                Buscar
-              </button>
-            </form>
-
+          <div className="flex items-center gap-3 sm:gap-4 text-[var(--muted)]">
+            <button aria-label="Busca" className="p-1.5 transition hover:text-[var(--brand-deep)]">
+              <Search size={22} strokeWidth={1.5} />
+            </button>
             <button
               type="button"
               aria-label="Favoritos"
               onClick={() => scrollToSection('#favoritos')}
-              className="relative grid h-10 w-10 place-items-center rounded-full border border-[var(--line)] bg-white text-[var(--ink)]"
+              className="relative p-1.5 transition hover:text-[var(--brand-deep)]"
             >
-              <Heart size={17} />
+              <Heart size={22} strokeWidth={1.5} />
               {favoriteIds.length > 0 ? (
-                <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-[var(--brand)] text-[0.64rem] font-bold text-white">
+                <span className="absolute -right-0.5 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--brand-deep)] text-[0.55rem] font-bold text-white shadow-sm border border-white">
                   {favoriteIds.length}
                 </span>
               ) : null}
@@ -685,11 +668,11 @@ function App() {
               type="button"
               aria-label="Carrinho"
               onClick={handleOpenCart}
-              className="relative grid h-10 w-10 place-items-center rounded-full bg-[var(--ink)] text-white"
+              className="relative rounded-full bg-[var(--brand-deep)] p-2.5 text-white transition hover:brightness-105 shadow-sm"
             >
-              <ShoppingBag size={17} />
+              <ShoppingBag size={20} strokeWidth={1.5} />
               {cartCount > 0 ? (
-                <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-[var(--brand-soft)] text-[0.64rem] font-bold text-[var(--brand-deep)]">
+                <span className="absolute -left-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[0.6rem] font-bold text-[var(--brand-deep)] shadow-sm">
                   {cartCount}
                 </span>
               ) : null}
@@ -697,19 +680,19 @@ function App() {
           </div>
         </div>
 
-        <div className="border-t border-[var(--line)] lg:hidden">
+        <div className="border-t border-[var(--line)] lg:hidden bg-white">
           <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto px-4 py-3">
-            <div className="flex min-w-max items-center gap-2">
+            <div className="flex min-w-max items-center space-x-1">
               <button
                 type="button"
                 onClick={() => handleCategoryRedirect(ALL_CATEGORIES)}
-                className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                className={`px-4 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition rounded-full ${
                   activeCategory === ALL_CATEGORIES
-                    ? 'bg-[var(--brand-deep)] text-white'
-                    : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                    ? 'bg-[var(--brand-soft)] text-[var(--brand-deep)]'
+                    : 'bg-transparent text-[var(--muted)]'
                 }`}
               >
-                {ALL_CATEGORIES}
+                TODAS
               </button>
 
               {categories.map((category) => (
@@ -717,10 +700,10 @@ function App() {
                   key={`mobile-header-${category.chip}`}
                   type="button"
                   onClick={() => handleCategoryRedirect(category.name)}
-                  className={`rounded-full px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.09em] transition ${
+                  className={`px-4 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] transition rounded-full ${
                     activeCategory === category.name
-                      ? 'bg-[var(--brand-deep)] text-white'
-                      : 'border border-[var(--line)] bg-white text-[var(--muted)] hover:bg-[var(--brand-soft)]'
+                      ? 'bg-[var(--brand-soft)] text-[var(--brand-deep)]'
+                      : 'bg-transparent text-[var(--muted)]'
                   }`}
                 >
                   {category.chip}
@@ -731,33 +714,33 @@ function App() {
         </div>
       </header>
 
-      <main className="pb-24 lg:pb-16">
-        <section className="px-4 pb-4 pt-3 sm:pb-5 sm:pt-4 lg:px-8 lg:pt-6">
-          <div className="no-scrollbar mx-auto flex max-w-7xl gap-3 overflow-x-auto pb-1 sm:grid sm:gap-4 sm:overflow-visible sm:pb-0 sm:grid-cols-2 lg:grid-cols-3">
-            <article className="glass min-w-[86%] rounded-2xl px-4 py-3 sm:min-w-0 sm:rounded-3xl sm:px-5 sm:py-4">
-              <p className="text-[0.64rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)] sm:text-[0.68rem] sm:tracking-[0.1em]">
+      <main className="pb-24 lg:pb-16 bg-white">
+        <section className="px-4 pb-6 pt-5 sm:pb-8 sm:pt-8 lg:px-8 lg:pt-10">
+          <div className="no-scrollbar mx-auto flex max-w-7xl gap-4 overflow-x-auto pb-2 sm:grid sm:gap-6 sm:overflow-visible sm:pb-0 sm:grid-cols-2 lg:grid-cols-3">
+            <article className="min-w-[86%] border border-gray-100 bg-[var(--surface-soft)] px-5 py-5 sm:min-w-0 sm:px-6 sm:py-6 shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--brand-deep)] sm:text-[0.65rem] mb-2">
                 Frete para todo Brasil
               </p>
-              <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
-                RJ e SP com condicoes especiais e envio rapido.
+              <p className="text-[0.98rem] font-medium leading-[1.4] text-[var(--ink)] sm:text-[1.05rem]">
+                RJ e SP com condições especiais e envio rápido.
               </p>
             </article>
 
-            <article className="glass min-w-[86%] rounded-2xl px-4 py-3 sm:min-w-0 sm:rounded-3xl sm:px-5 sm:py-4">
-              <p className="text-[0.64rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)] sm:text-[0.68rem] sm:tracking-[0.1em]">
+            <article className="min-w-[86%] border border-gray-100 bg-[var(--surface-soft)] px-5 py-5 sm:min-w-0 sm:px-6 sm:py-6 shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--brand-deep)] sm:text-[0.65rem] mb-2">
                 Formas de pagamento
               </p>
-              <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
-                Em ate 12x no cartao e atendimento rapido.
+              <p className="text-[0.98rem] font-medium leading-[1.4] text-[var(--ink)] sm:text-[1.05rem]">
+                Em até 12x no cartão e atendimento rápido.
               </p>
             </article>
 
-            <article className="glass min-w-[86%] rounded-2xl px-4 py-3 sm:min-w-0 sm:rounded-3xl sm:px-5 sm:py-4 sm:col-span-2 lg:col-span-1">
-              <p className="text-[0.64rem] font-bold uppercase tracking-[0.09em] text-[var(--muted)] sm:text-[0.68rem] sm:tracking-[0.1em]">
+            <article className="min-w-[86%] border border-gray-100 bg-[var(--surface-soft)] px-5 py-5 sm:min-w-0 sm:px-6 sm:py-6 sm:col-span-2 lg:col-span-1 shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--brand-deep)] sm:text-[0.65rem] mb-2">
                 Garantia e suporte
               </p>
-              <p className="mt-1.5 text-[0.98rem] font-semibold leading-snug text-[var(--ink)] sm:mt-2 sm:text-sm">
-                Atendimento dedicado para trocas, duvidas e pos-venda.
+              <p className="text-[0.98rem] font-medium leading-[1.4] text-[var(--ink)] sm:text-[1.05rem]">
+                Atendimento dedicado para trocas, dúvidas e pós-venda.
               </p>
             </article>
           </div>
@@ -767,22 +750,22 @@ function App() {
           <div className="mx-auto max-w-7xl">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
+                <p className="text-[0.65rem] font-medium uppercase tracking-[0.2em] text-[var(--muted)] mb-1">
                   Vitrine
                 </p>
-                <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
+                <h2 className="font-heading text-4xl text-[var(--ink)] sm:text-5xl font-medium tracking-wide">
                   Best Seller
                 </h2>
               </div>
-              <p className="text-sm text-[var(--muted)]">
+              <p className="text-sm text-[var(--muted)] font-medium">
                 {filteredProducts.length} produto(s) encontrado(s)
               </p>
             </div>
 
             {searchTerm.trim() || activeCategory !== ALL_CATEGORIES ? (
-              <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--line)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
+              <div className="mb-6 flex flex-wrap items-center gap-3 bg-[var(--surface)] border border-gray-200 px-5 py-3 text-sm text-[var(--muted)]">
                 <span>
-                  Filtro ativo: <strong>{activeCategory}</strong>
+                  Filtro ativo: <strong className="text-[var(--ink)] font-semibold">{activeCategory}</strong>
                 </span>
                 <button
                   type="button"
@@ -791,32 +774,32 @@ function App() {
                     setActiveCategory(ALL_CATEGORIES)
                     notify('Filtros removidos.')
                   }}
-                  className="rounded-full border border-[var(--line)] px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[var(--ink)]"
+                  className="border-b border-[var(--ink)] text-[0.65rem] font-bold uppercase tracking-[0.1em] text-[var(--ink)] pb-0.5 ml-2"
                 >
                   Limpar
                 </button>
               </div>
             ) : null}
 
-            {renderProductShelf(bestSellerProducts, 'Nenhum produto encontrado nessa combinacao.')}
+            {renderProductShelf(bestSellerProducts, 'Nenhum produto encontrado nessa combinação.')}
           </div>
         </section>
 
-        <section className="px-4 py-10 lg:px-8">
+        <section className="px-4 py-12 lg:px-8 bg-[var(--surface)] border-t border-[var(--line)]">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
+                <p className="text-[0.65rem] font-medium uppercase tracking-[0.2em] text-[var(--muted)] mb-1">
                   Vitrine
                 </p>
-                <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
+                <h2 className="font-heading text-4xl text-[var(--ink)] sm:text-5xl font-medium tracking-wide">
                   Banho de ouro
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => handleCategoryRedirect('Semijoias de Ouro')}
-                className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.09em] text-[var(--brand-deep)]"
+                className="border-b border-[var(--ink)] text-[0.65rem] font-bold uppercase tracking-[0.1em] text-[var(--ink)] pb-0.5"
               >
                 Ver tudo
               </button>
@@ -826,21 +809,21 @@ function App() {
           </div>
         </section>
 
-        <section className="px-4 py-10 lg:px-8">
+        <section className="px-4 py-12 lg:px-8 bg-white">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
+                <p className="text-[0.65rem] font-medium uppercase tracking-[0.2em] text-[var(--muted)] mb-1">
                   Vitrine
                 </p>
-                <h2 className="mt-2 font-heading text-4xl text-[var(--ink)] sm:text-5xl">
+                <h2 className="font-heading text-4xl text-[var(--ink)] sm:text-5xl font-medium tracking-wide">
                   Banho de prata
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => handleCategoryRedirect('Semijoias de Prata')}
-                className="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.09em] text-[var(--brand-deep)]"
+                className="border-b border-[var(--ink)] text-[0.65rem] font-bold uppercase tracking-[0.1em] text-[var(--ink)] pb-0.5"
               >
                 Ver tudo
               </button>

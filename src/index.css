@@ -32,7 +32,7 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--ink);
-  background-color: #ffffff;
+  background-color: var(--surface);
   background-image: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -45,8 +45,8 @@ body {
 }
 
 ::selection {
-  background: #f2c9d9;
-  color: #4a2d3b;
+  background: var(--brand);
+  color: #FFFFFF;
 }
 
 @layer utilities {
