@@ -62,7 +62,7 @@ function ProductCard({
   }, [product.category, product.name])
 
   return (
-    <article className="flex flex-col bg-white overflow-visible pb-4 border border-gray-100 shadow-sm h-full w-full">
+    <article className="flex flex-col bg-[var(--surface-soft)] overflow-visible pb-4 border border-[var(--line)] shadow-sm h-full w-full">
       <div 
         className="relative aspect-[3/4] mb-3 bg-gray-100 sm:aspect-[4/5] w-full cursor-pointer overflow-hidden"
         onClick={() => setIsPaused(!isPaused)}
@@ -322,21 +322,6 @@ function App() {
       categoryName === ALL_CATEGORIES
         ? 'Mostrando todas as categorias.'
         : `Filtro aplicado: ${categoryName}`,
-    )
-  }
-
-  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setActiveCategory(ALL_CATEGORIES)
-    scrollToSection('#best-seller')
-
-    const cleanSearch = searchTerm.trim()
-
-    notify(
-      cleanSearch
-        ? `Resultados para "${cleanSearch}".`
-        : 'Busca limpa. Mostrando todos os produtos.',
-      'info',
     )
   }
 
@@ -602,7 +587,7 @@ function App() {
         </div>
       </div>
 
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+      <header className="sticky top-0 z-40 bg-[var(--surface-soft)]/95 backdrop-blur-md shadow-sm border-b border-gray-100">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 lg:px-8">
           <div className="flex items-center gap-3">
             <a
@@ -680,7 +665,7 @@ function App() {
           </div>
         </div>
 
-        <div className="border-t border-[var(--line)] lg:hidden bg-white">
+        <div className="border-t border-[var(--line)] lg:hidden bg-[var(--surface-soft)]">
           <div className="no-scrollbar mx-auto max-w-7xl overflow-x-auto px-4 py-3">
             <div className="flex min-w-max items-center space-x-1">
               <button
@@ -714,38 +699,7 @@ function App() {
         </div>
       </header>
 
-      <main className="pb-24 lg:pb-16 bg-white">
-        <section className="px-4 pb-6 pt-5 sm:pb-8 sm:pt-8 lg:px-8 lg:pt-10">
-          <div className="no-scrollbar mx-auto flex max-w-7xl gap-4 overflow-x-auto pb-2 sm:grid sm:gap-6 sm:overflow-visible sm:pb-0 sm:grid-cols-2 lg:grid-cols-3">
-            <article className="min-w-[86%] border border-gray-100 bg-[var(--surface-soft)] px-5 py-5 sm:min-w-0 sm:px-6 sm:py-6 shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--brand-deep)] sm:text-[0.65rem] mb-2">
-                Frete para todo Brasil
-              </p>
-              <p className="text-[0.98rem] font-medium leading-[1.4] text-[var(--ink)] sm:text-[1.05rem]">
-                RJ e SP com condições especiais e envio rápido.
-              </p>
-            </article>
-
-            <article className="min-w-[86%] border border-gray-100 bg-[var(--surface-soft)] px-5 py-5 sm:min-w-0 sm:px-6 sm:py-6 shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--brand-deep)] sm:text-[0.65rem] mb-2">
-                Formas de pagamento
-              </p>
-              <p className="text-[0.98rem] font-medium leading-[1.4] text-[var(--ink)] sm:text-[1.05rem]">
-                Em até 12x no cartão e atendimento rápido.
-              </p>
-            </article>
-
-            <article className="min-w-[86%] border border-gray-100 bg-[var(--surface-soft)] px-5 py-5 sm:min-w-0 sm:px-6 sm:py-6 sm:col-span-2 lg:col-span-1 shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-[0.6rem] font-bold uppercase tracking-[0.15em] text-[var(--brand-deep)] sm:text-[0.65rem] mb-2">
-                Garantia e suporte
-              </p>
-              <p className="text-[0.98rem] font-medium leading-[1.4] text-[var(--ink)] sm:text-[1.05rem]">
-                Atendimento dedicado para trocas, dúvidas e pós-venda.
-              </p>
-            </article>
-          </div>
-        </section>
-
+      <main className="pb-24 lg:pb-16 bg-[var(--surface-soft)]">
         <section id="best-seller" className="px-4 py-10 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -763,7 +717,7 @@ function App() {
             </div>
 
             {searchTerm.trim() || activeCategory !== ALL_CATEGORIES ? (
-              <div className="mb-6 flex flex-wrap items-center gap-3 bg-[var(--surface)] border border-gray-200 px-5 py-3 text-sm text-[var(--muted)]">
+              <div className="mb-6 flex flex-wrap items-center gap-3 bg-[var(--surface-soft)] border border-[var(--line)] px-5 py-3 text-sm text-[var(--ink)]">
                 <span>
                   Filtro ativo: <strong className="text-[var(--ink)] font-semibold">{activeCategory}</strong>
                 </span>
@@ -785,7 +739,7 @@ function App() {
           </div>
         </section>
 
-        <section className="px-4 py-12 lg:px-8 bg-[var(--surface)] border-t border-[var(--line)]">
+        <section className="px-4 py-12 lg:px-8 bg-[var(--surface-soft)] border-t border-[var(--line)]">
           <div className="mx-auto max-w-7xl">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -809,7 +763,7 @@ function App() {
           </div>
         </section>
 
-        <section className="px-4 py-12 lg:px-8 bg-white">
+        <section className="px-4 py-12 lg:px-8 bg-[var(--surface-soft)] border-t border-[var(--line)]">
           <div className="mx-auto max-w-7xl">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
