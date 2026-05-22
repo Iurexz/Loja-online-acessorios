@@ -47,7 +47,7 @@ function ProductCard({
   return (
     <article className="glass hover-lift animate-rise rounded-3xl p-2 sm:p-5">
       <div
-        className="relative mb-2 aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 bg-white p-1.5 sm:mb-5 sm:aspect-[4/5] sm:p-4"
+        className="relative mb-2 aspect-[4/3] overflow-hidden rounded-2xl border border-black/5 bg-white p-1.5 sm:mb-5 sm:aspect-[4/5] sm:p-4"
       >
         <p className="absolute left-2 top-2 rounded-full bg-white/85 px-2 py-1 text-[0.56rem] font-bold uppercase leading-none tracking-[0.08em] text-[var(--brand-deep)] sm:left-3 sm:top-3 sm:px-2.5 sm:text-[0.63rem] sm:tracking-[0.1em]">
           {product.badge}
@@ -494,7 +494,7 @@ function App() {
     }
 
     return (
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {items.map((product) => (
           <ProductCard
             key={product.id}

@@ -4,14 +4,14 @@
 :root {
   --font-heading: 'Ubuntu', sans-serif;
   --font-body: 'Averia Serif Libre', serif;
-  --surface: #d86487;
-  --surface-soft: #ffffff;
-  --ink: #d86487;
-  --muted: #d86487;
-  --line: #ffffff;
-  --brand: #d86487;
-  --brand-soft: #ffffff;
-  --brand-deep: #d86487;
+  --surface: #F69DB3;
+  --surface-soft: #FDF9F9;
+  --ink: #F69DB3;
+  --muted: #F69DB3;
+  --line: #FDF9F9;
+  --brand: #FAD0D7;
+  --brand-soft: #FDF9F9;
+  --brand-deep: #FAD0D7;
 }
 
 * {
