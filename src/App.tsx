@@ -34,10 +34,6 @@ type ProductCardProps = {
   onAddToCart: (product: Product) => void
 }
 
-const productWhatsAppLink = (product: Product) => {
-  return buildWhatsAppUrl(`Oi! Quero comprar ${product.name} por ${product.price}. Pode me ajudar?`)
-}
-
 function ProductCard({
   product,
   isFavorite,
